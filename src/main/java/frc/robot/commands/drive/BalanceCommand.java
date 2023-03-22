@@ -44,7 +44,7 @@ public class BalanceCommand extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-      //m_driveSubsystem.driveSwerve(0, 0, 0, false, true);
+      m_drivetrain.drive(0, 0, 0, false, true);
     }
   
     // Returns true when the command should end.

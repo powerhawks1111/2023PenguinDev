@@ -1,5 +1,6 @@
 package frc.robot.commands.intake;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
@@ -7,6 +8,7 @@ import frc.robot.subsystems.IntakeSubSystem;
 
 public class CalibrateIntake extends CommandBase{
     private IntakeSubSystem m_intakeSubsystem;
+    private Timer m_timer = new Timer();
     public CalibrateIntake (IntakeSubSystem intakeSubsystem) {
         m_intakeSubsystem = intakeSubsystem;
         addRequirements(m_intakeSubsystem);
@@ -14,7 +16,7 @@ public class CalibrateIntake extends CommandBase{
 
     @Override
     public void initialize () {
-
+        m_timer.start();
     }
 
     @Override 
@@ -22,16 +24,17 @@ public class CalibrateIntake extends CommandBase{
         if (!m_intakeSubsystem.isCalibrated()) {
             m_intakeSubsystem.calculateIntakeHome();
         }
-        
     }
 
     @Override
     public boolean isFinished () {
-      return m_intakeSubsystem.isCalibrated();
+      return true;
     }
 
     @Override
     public void end (boolean interrupted) {
-    
+        
+        
+        m_intakeSubsystem.setCalibrated(true);
     }
 }

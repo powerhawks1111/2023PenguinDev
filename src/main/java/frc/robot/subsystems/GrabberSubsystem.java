@@ -14,14 +14,14 @@ public class GrabberSubsystem extends SubsystemBase {
     private CANSparkMax m_grabMotor = new CANSparkMax(grabMotor, MotorType.kBrushless);
     private double limit = .01; //amps to stop the grabber calibration at, two works well
     private double openPosition = 0;
-    private double range = 25;// the amount of rotations until we close the grabber
+    private double range = 30;// the amount of rotations until we close the grabber
     private double cubePosition = 1;
     private double conePosition = 1;
     private double tolerance = 0.5; //the range of rotation we're happy with with the pid conroller
     private double wantedPosition = 0;
     private double transFormedPosition = 0;
     private SparkMaxPIDController m_pidController = m_grabMotor.getPIDController();
-    private double kP = 1;
+    private double kP = 1.2;
     private double kI = 0;
     private double kD = .1;
     private double kFF = 0;
@@ -41,9 +41,9 @@ public class GrabberSubsystem extends SubsystemBase {
     
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("openPosition", openPosition);
-        SmartDashboard.putNumber("CurrentPosition", m_grabMotor.getEncoder().getPosition());
-        SmartDashboard.putNumber("Grabber Amps", m_grabMotor.getOutputCurrent());
+        //SmartDashboard.putNumber("openPosition", openPosition);
+        //SmartDashboard.putNumber("CurrentPosition", m_grabMotor.getEncoder().getPosition());
+        //SmartDashboard.putNumber("Grabber Amps", m_grabMotor.getOutputCurrent());
     }
 
     /**

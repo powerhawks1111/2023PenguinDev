@@ -16,7 +16,8 @@ public class PistonArms extends CommandBase {
 
     @Override
     public void initialize() {
-        m_armSubsystem.deployPistons(m_deploy);
+        if (!m_deploy)
+            m_armSubsystem.deployPistons(m_deploy);
     }
     @Override 
     public boolean isFinished() {

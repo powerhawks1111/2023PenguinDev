@@ -1,6 +1,8 @@
 package frc.robot.commands.CombinedCommands;
 
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.arm.CalibrateArm;
 import frc.robot.commands.intake.CalibrateIntake;
 import frc.robot.subsystems.ArmSubsystem;
@@ -17,8 +19,10 @@ public class CalibrateStuff extends SequentialCommandGroup{
        
         //addRequirements(m_intakeSubSystem);
         addCommands(
+            // new WaitCommand(4),
+            new CalibrateArm(m_armSubsystem),
             new CalibrateIntake(m_intakeSubSystem),
-            new CalibrateArm(m_armSubsystem)
+            new PrintCommand("done calibrating")
                    //2.8 radians;
         );
         

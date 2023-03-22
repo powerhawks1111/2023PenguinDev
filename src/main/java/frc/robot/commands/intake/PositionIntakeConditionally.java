@@ -1,32 +1,31 @@
-package frc.robot.commands.arm;
+package frc.robot.commands.intake;
 
 import java.util.ResourceBundle.Control;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.IntakeSubSystem;
 
-public class ControlArm extends CommandBase {
-    private ArmSubsystem m_armSubsystem;
+public class PositionIntakeConditionally extends CommandBase {
+    private IntakeSubSystem m_intakeSubsystem;
     private double m_position;
 
-    public ControlArm(ArmSubsystem subsytem, double position) {
-        m_armSubsystem = subsytem;
-        m_position = position;
-        addRequirements(m_armSubsystem);
+    public PositionIntakeConditionally(IntakeSubSystem subsytem) {
+        m_intakeSubsystem = subsytem;
+        // m_position = position;
+        addRequirements(m_intakeSubsystem);
     }
 
     @Override
     public void execute() {
      //m_armSubsystem.runArmMotors(m_speed);
-        m_armSubsystem.positionArm(m_position);
-        //m_armSubsystem.runArmMotors(m_position);
+        m_intakeSubsystem.positionConditionally();
         //m_armSubsystem.deployPistons(true);
     }
 
     @Override
     public boolean isFinished() {
-        //return false;
-        return m_armSubsystem.closeToPosition();
+        return m_intakeSubsystem.closeToPosition();
     }
 
     @Override

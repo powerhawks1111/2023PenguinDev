@@ -5,27 +5,25 @@ import java.util.ResourceBundle.Control;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class ControlArm extends CommandBase {
+public class PositionConditionally extends CommandBase {
     private ArmSubsystem m_armSubsystem;
     private double m_position;
 
-    public ControlArm(ArmSubsystem subsytem, double position) {
+    public PositionConditionally(ArmSubsystem subsytem) {
         m_armSubsystem = subsytem;
-        m_position = position;
+        // m_position = position;
         addRequirements(m_armSubsystem);
     }
 
     @Override
     public void execute() {
      //m_armSubsystem.runArmMotors(m_speed);
-        m_armSubsystem.positionArm(m_position);
-        //m_armSubsystem.runArmMotors(m_position);
+        m_armSubsystem.positionConditionally();
         //m_armSubsystem.deployPistons(true);
     }
 
     @Override
     public boolean isFinished() {
-        //return false;
         return m_armSubsystem.closeToPosition();
     }
 

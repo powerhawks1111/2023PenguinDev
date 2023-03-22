@@ -37,6 +37,7 @@ public class Robot extends TimedRobot{
     DriveAndOperate driveAndOperate = new DriveAndOperate();
     private double autoV = 2.5; //auto constraints
     private double autoA = 1.25;
+    private boolean start = false;
     
     // GenericButton buttonA = new G
     
@@ -51,12 +52,18 @@ public class Robot extends TimedRobot{
     @Override
     public void robotInit() {
     
-
-
+     
+        // for (int port = 5800; port <= 5805; port++) {
+        //     PortForwarder.add(port, "10.11.11.11", port);
+        // }
+        PortForwarder.add(5800, "limelight.local", 5800);
+        PortForwarder.add(5801, "limelight.local", 5801);
+        PortForwarder.add(5805, "limelight.local", 5805);
         CameraServer.startAutomaticCapture();
         //PathPlannerServer.startServer(5811);
         m_RobotContainer = new RobotContainer();
         m_RobotContainer.smartDashboardUpdater.setupSmartDashboard();
+    
 
     }
 
@@ -64,6 +71,10 @@ public class Robot extends TimedRobot{
     public void robotPeriodic() {
         //SmartDashboard.putNumber("X Positiion Driving", RobotContainer.drivetrain.getCurrentPose2d().getX());
         CommandScheduler.getInstance().run();
+        // if (!start) {
+        //     m_RobotContainer.setDefaultCommands();
+        //     start = true;
+        // }
         //m_RobotContainer.visionSubsystem.updatePipeline();
        //RobotContainer.drivetrain.updateOdometry();
         // SmartDashboard.putNumber("frontRight", Objects.frontRightDuty.getOutput());
@@ -77,7 +88,11 @@ public class Robot extends TimedRobot{
         // autoSelected = RobotContainer.smartDashboardUpdater.getAutoSelected();
     //    m_autonomousCommand = m_RobotContainer.getAutoCommand();
     //    m_autonomousCommand.schedule();
+        //m_RobotContainer.setDefaultCommands();
+        m_RobotContainer.setDefaultCommands();
         m_RobotContainer.getAutoCommand().schedule();
+        
+       
         
 
     }
@@ -117,9 +132,11 @@ public class Robot extends TimedRobot{
         // if (m_autonomousCommand != null) {
         //     m_autonomousCommand.cancel();
         // }
+        
+
         CommandScheduler.getInstance().cancelAll();
-        Command command = new CalibrateStuff(m_RobotContainer.intakeSubSystem, m_RobotContainer.armSubsystem);
-        command.schedule();
+        m_RobotContainer.setDefaultCommands();
+        
 
 
         //m_RobotContainer.defaultCommand.schedule();

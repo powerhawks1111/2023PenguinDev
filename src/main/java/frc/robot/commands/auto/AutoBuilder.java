@@ -3,16 +3,34 @@ package frc.robot.commands.auto;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.commands.CombinedCommands.CalibrateStuff;
+import frc.robot.commands.CombinedCommands.ConditionalIntake;
+import frc.robot.commands.CombinedCommands.HoldTight;
+import frc.robot.commands.CombinedCommands.TeleopCommands.CloseGrabber;
+import frc.robot.commands.CombinedCommands.TeleopCommands.OpenGrabber;
+import frc.robot.commands.CombinedCommands.TeleopCommands.ScoreHigh;
+import frc.robot.commands.CombinedCommands.TeleopCommands.ScoreLow;
+import frc.robot.commands.CombinedCommands.TeleopCommands.ScoreMid;
+import frc.robot.commands.arm.ReturnHome;
+import frc.robot.commands.auto.AutoSpecificCommands.ComplicatedReturnHome;
 import frc.robot.commands.drive.BalanceCommand;
+import frc.robot.commands.drive.StayStill;
+import frc.robot.commands.intake.DefaultPositionIntake;
+import frc.robot.commands.intake.IntakeCone;
+import frc.robot.commands.intake.PositionIntake;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
 import edu.wpi.first.math.controller.HolonomicDriveController; 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.GrabberSubsystem;
+import frc.robot.subsystems.IntakeSubSystem;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
@@ -46,26 +64,49 @@ public class AutoBuilder extends CommandBase{
 
     List<PathPlannerTrajectory> pathGroup;
     private Drivetrain m_drivetrain;
+    public IntakeSubSystem m_intakeSubSystem;
+    public ArmSubsystem m_armSubsystem;
+    public GrabberSubsystem m_grabberSubsystem;
     private SwerveAutoBuilder autoBuilder;
+    
     Command fullAuto;
     HashMap<String, Command> eventMap = new HashMap<>();
     
 
-    public AutoBuilder ( Drivetrain drivetrain, String autoPath, double maxVelocity, double maxAcceleration) { //TODO GET CONSTANTS RIGHT
+    public AutoBuilder ( Drivetrain drivetrain, ArmSubsystem armSubsystem, IntakeSubSystem intakeSubsystem, GrabberSubsystem grabberSubsystem, String autoPath, double maxVelocity, double maxAcceleration) { //TODO GET CONSTANTS RIGHT
         pathGroup = PathPlanner.loadPathGroup(autoPath, new PathConstraints(maxVelocity, maxAcceleration));
+        System.out.println(autoPath);
         m_drivetrain = drivetrain;
+        m_intakeSubSystem = intakeSubsystem;
+        m_armSubsystem = armSubsystem;
+        m_grabberSubsystem = grabberSubsystem;
         eventMap.put("turnCommand", new turnCommandTest(m_drivetrain));
         eventMap.put("balance", new BalanceCommand(m_drivetrain));
         eventMap.put("hold", new HoldCommand(m_drivetrain));
+        eventMap.put("CloseGrabber", new CloseGrabber(m_grabberSubsystem));
+        eventMap.put("OpenGrabber", new OpenGrabber(m_grabberSubsystem));
+        eventMap.put("ScoreHigh", new ScoreHigh(m_intakeSubSystem, m_armSubsystem, m_grabberSubsystem));
+        eventMap.put("ScoreLow", new ScoreLow(m_intakeSubSystem, m_armSubsystem, m_grabberSubsystem));
+        eventMap.put("ScoreMid", new ScoreMid(m_intakeSubSystem, m_armSubsystem, m_grabberSubsystem));
+        eventMap.put("ReturnHome", new ComplicatedReturnHome(m_intakeSubSystem, m_armSubsystem, m_grabberSubsystem));
+        eventMap.put("DeployIntake", new ConditionalIntake(m_intakeSubSystem, m_armSubsystem, m_grabberSubsystem));
+        eventMap.put("StayStill", new StayStill(m_drivetrain));
+        eventMap.put("CalibrateStuff", new CalibrateStuff(m_intakeSubSystem, m_armSubsystem));
+        eventMap.put("RunIntake", new IntakeCone(m_intakeSubSystem, m_armSubsystem, m_grabberSubsystem, new HoldTight(m_intakeSubSystem, m_armSubsystem, m_grabberSubsystem))); 
+        eventMap.put("PositionIntake", new PositionIntake(m_intakeSubSystem, (Math.PI * .6666)));
         // THESE PID TERMS WORK: Translate: P:2.75, D:.65, TURN P:1.1, D:.1
         m_drivetrain.resetNavxMark(pathGroup.get(0).getInitialHolonomicPose().getRotation().getDegrees()); //this resets our degrees to feild
-        System.out.println(pathGroup.get(0).getInitialHolonomicPose().getRotation().getDegrees());
-        autoBuilder = new SwerveAutoBuilder(m_drivetrain::visionGetCurrentPose2d, m_drivetrain::setPose, new PIDConstants(3.25, 0, .15), new PIDConstants(1.15, 0, .175), m_drivetrain::driveAutonomous, eventMap, true, m_drivetrain);
+        System.out.println(pathGroup.get(0).getInitialHolonomicPose().getRotation().getDegrees()); //3.25, 0, .15            was 8
+        autoBuilder = new SwerveAutoBuilder(m_drivetrain::visionGetCurrentPose2d, m_drivetrain::setPose, new PIDConstants(8, 0, 0), new PIDConstants(1.15, 0, .175), m_drivetrain::driveAutonomous, eventMap, true, m_drivetrain);
         fullAuto = autoBuilder.fullAuto(pathGroup);
         addRequirements(m_drivetrain);
+        // addRequirements(m_intakeSubSystem);
+        // addRequirements(m_armSubsystem);
+        // addRequirements(m_grabberSubsystem);
     }
     @Override
     public void initialize () {
+
         fullAuto.schedule();
         System.out.println(pathGroup.get(0).getInitialHolonomicPose().getRotation().getDegrees());
         SmartDashboard.putNumber("initRotation", pathGroup.get(0).getInitialHolonomicPose().getRotation().getDegrees());

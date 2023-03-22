@@ -53,12 +53,14 @@ public class VisionSubsystem extends SubsystemBase {
     private double fieldWidth = 8.0137;//in meters
     private double fieldLength = 16.5417;
     private double[] visionPose = new double[6];
-    private double dist0XStdDev = .01;//0.0475;
-    private double dist0YStdDev = .01;//0.0850;
-    private double dist1XStdDev = .02;//0.0156;
-    private double dist1YStdDev = .02;//0.0324;
-    private double dist2XStdDev = .2;//0.0253;
-    private double dist2YStdDev = .2;//0.0519;
+    public double dist0XStdDev = .8;//0.0475;
+    public double dist0YStdDev = .8;//0.0850;
+    public double dist1XStdDev = 1.6;//0.0156;
+    public double dist1YStdDev = 1.6;//0.0324;
+    public double dist2XStdDev = 6;//0.0253;
+    public double dist2YStdDev = 6;//0.0519;
+    public double placeXStdDev = 0.6;
+    public double placeYStdDev = 0.6;
     private double txBound = 2; //this is the range of tx 2 that makes the y position of the limelight goofy. We check this every time. Dont ask me why
     private double l = 0; //stored from tl;
     private double c = 0; //stored from cl
@@ -68,13 +70,14 @@ public class VisionSubsystem extends SubsystemBase {
     // private int fiducialIndex = -1;
     // String m_json = "";
     private int aprilTags = 0;
+    private double [] relativeVisionPose;
 
 
 
 
-    // LimelightHelpers.LimelightResults llresults = LimelightHelpers.getLatestResults("limelight");
+    public LimelightHelpers.LimelightResults llresults = LimelightHelpers.getLatestResults("limelight");
     
-    // LimelightHelpers.LimelightTarget_Fiducial[] fiducials = llresults.targetingResults.targets_Fiducials;
+    public LimelightHelpers.LimelightTarget_Fiducial[] fiducials = llresults.targetingResults.targets_Fiducials;
 
 
 
@@ -115,22 +118,22 @@ public class VisionSubsystem extends SubsystemBase {
         // llresults.getAlliance();
         // LimelightHelpers.LimelightTarget_Fiducial = llresults.results.targets_Fiducials
         // LimelightHelpers.LimelightTarget_Fiducial = m_results.results.targets_Fiducials;
-        // LimelightHelpers.LimelightResults llresults = LimelightHelpers.getLatestResults("");
-        // LimelightHelpers.LimelightTarget_Fiducial[] bruh = llresults.results.targets_Fiducials;
-        // LimelightHelpers.getJSONDump("limelight").
+        LimelightHelpers.getJSONDump("limelight");
+        LimelightHelpers.LimelightResults llresults = LimelightHelpers.getLatestResults("");
+        //LimelightHelpers.LimelightTarget_Fiducial[] bruh = llresults.results.targets_Fiducials;
+        
 
 
 
 
         // llresults = LimelightHelpers.getLatestResults("");
-        // fiducials = llresults.targetingResults.targets_Fiducials;
-
-
+        fiducials = llresults.targetingResults.targets_Fiducials;
 
 
         //a = ta.getDouble(0);
-        validAprilTags = (1 >= 2);
+        validAprilTags = (fiducials.length >= 2);
         visionPose = getVisionTags(); 
+        relativeVisionPose = visionRelativeOdometry();
         SmartDashboard.putNumber("#Tags", 1);
         // SmartDashboard.putString("JSON", json.getString("{}"));
         SmartDashboard.putBoolean("Valid April Tag", validAprilTags);
@@ -216,7 +219,9 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     */
-
+    public boolean canWePlace () {
+        return numFiducials() == 1;
+    }
     /**
      * Returns whether you have trustable vision on at least two AprilTags
      * @param navx
@@ -227,7 +232,33 @@ public class VisionSubsystem extends SubsystemBase {
         return (validAprilTags) && (Math.abs(navx.getPitch()) <= 7); //x is tx
     }
 
+    public int numFiducials () {
+        return fiducials.length;
+    }
+
+    public void visionPlaceOdometry (SwerveDrivePoseEstimator estimator, Rotation2d navxRotation) {
+        c = cl.getDouble(16); //16 is normally what it is
+        l = tl.getDouble(60); //60 is an average number
+        if (!(relativeVisionPose[0] == 0)) { //if we actually have valid
+            Pose2d visionPose2d = new Pose2d(visionPose[0], visionPose[1], navxRotation);
+            estimator.addVisionMeasurement(visionPose2d, Timer.getFPGATimestamp() - (c/1000) -(l/1000));
+        }
+    }
+
+
+    public double[] visionRelativeOdometry() {
+        double id = (int) getDefault().getTable("limelight").getEntry("tid").getInteger(-1);
+        double[] vision;
+        if (id != -1) { //TODO fix this
+           vision =  getDefault().getTable("limelight").getEntry("tagpose").getDoubleArray(new double[6]);
+            return vision;
+            
+        } else {
+            return new double[6];
+        }
+    }
     /**
+     * 
      * Update odometry of the robot using AprilTag vision
      * The farther away you are from the targets, the less you trust the data
      * Sets the latency variables (c and l)
@@ -250,6 +281,29 @@ public class VisionSubsystem extends SubsystemBase {
         estimator.addVisionMeasurement(visionPose2d, Timer.getFPGATimestamp() - (c/1000) -(l/1000));
     }
 
+    public double[] getRelativePose() {
+        double id = (int) getDefault().getTable("limelight").getEntry("tid").getInteger(-1);
+        double[] vision;
+        if (id != -1) {
+            //double[] vision = getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
+            //Alliance = DriverStation.getAlliance().toString(); //this may be inefficent
+            //SmartDashboard.putString("Alliance", Alliance);
+            //if (Alliance == "Blue") { //these are our coords for blue alliance
+                // vision[0] = vision[0] + fieldLength/2; //distance to center of feild
+                // vision[1] = vision [1] + fieldWidth/2;
+            vision = getDefault().getTable("limelight").getEntry("botpose_targetspace").getDoubleArray(new double[6]);
+            //} else { //red alliance coords
+                //vision = getDefault().getTable("limelight").getEntry("botpose_wpired").getDoubleArray(new double[6]);
+                // vision[0] = fieldLength/2-vision[0];
+                // vision[1] = fieldWidth/2-vision[1];
+                // vision[5] = -vision[5]; //i think this is jsut because we are on opposite sides of the feild
+            //}
+            return vision;
+            
+        } else {
+            return new double[6];
+        }
+    }
     /**
      * Get the field-relative location of the robot while accounting for the alliance color (red/blue)
      * @return 3d botpose

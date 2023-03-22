@@ -7,20 +7,20 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.IntakeSubSystem;
 
-public class ConditionalIntake extends SequentialCommandGroup{
-    private IntakeSubSystem m_intakeSubsytem;
+public class HumanPlayerStation extends SequentialCommandGroup{
+    private IntakeSubSystem m_intakeSubSystem;
     private ArmSubsystem m_armSubsystem;
     private GrabberSubsystem m_grabberSubsystem;
     private HoldTight m_holdTight;
-    public ConditionalIntake(IntakeSubSystem intakeSubSystem, ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem) {
-        m_intakeSubsytem = intakeSubSystem;
+    public HumanPlayerStation(IntakeSubSystem intakeSubSystem, ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem, HoldTight holdTight) {
+        m_intakeSubSystem = intakeSubSystem;
         m_armSubsystem = armSubsystem;
         m_grabberSubsystem = grabberSubsystem;
-       
-        m_holdTight = new HoldTight(m_intakeSubsytem, m_armSubsystem, m_grabberSubsystem);
+        m_holdTight = holdTight;
         addCommands(
-            new PositionIntake(m_intakeSubsytem, .275), //.0891
-            new IntakeCone(m_intakeSubsytem, m_armSubsystem, m_grabberSubsystem, m_holdTight)
+            new PositionIntake(m_intakeSubSystem, Math.PI/2.15),
+            new IntakeCone(m_intakeSubSystem, m_armSubsystem, m_grabberSubsystem, m_holdTight)
         );
     }
 }
+ 

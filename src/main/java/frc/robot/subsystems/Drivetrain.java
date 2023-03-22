@@ -41,7 +41,7 @@ public class Drivetrain extends SubsystemBase {
     public static final double kMaxAngularSpeed = Math.PI/3; // 1/2 rotation per second
 
     private final AHRS navx = new AHRS();
-
+    public boolean donePlace = false;
 
     private PIDController xController = new PIDController(1/100, 0, 0);
     private PIDController yController = new PIDController(1/100, 0, 0);
@@ -51,7 +51,7 @@ public class Drivetrain extends SubsystemBase {
     private double anglePreviousPitch = 0;
     private double xControl = 0;
     private double yControl = 0;
-    public double kPBal = .01;
+    public double kPBal = .0145; //.014
     public double kDBal = 0.001;//.0019;
     //positions of each swerve unit on the robot
     // private final Translation2d m_frontLeftLocation = new Translation2d(-0.538,  0.538);
@@ -71,17 +71,14 @@ public class Drivetrain extends SubsystemBase {
     private final Translation2d m_backRightLocation = new Translation2d( -0.538, -0.538);
 
     //constructor for each swerve module
-    private final SwerveModule m_frontRight  = new SwerveModule(21, 2, 10, 0.811);
-    private final SwerveModule m_frontLeft = new SwerveModule(3, 4, 11, 0.809);
-    private final SwerveModule m_backLeft  = new SwerveModule(5, 6, 12, 0.122);
-    private final SwerveModule m_backRight   = new SwerveModule(7, 8, 13, 0.1674); //0.05178
+    private final SwerveModule m_frontRight  = new SwerveModule(21, 2, 10, 0.8182);
+    private final SwerveModule m_frontLeft = new SwerveModule(3, 4, 11, 0.812);
+    private final SwerveModule m_backLeft  = new SwerveModule(5, 6, 12, 0.124);
+    private final SwerveModule m_backRight   = new SwerveModule(7, 8, 13, 0.170); //0.05178
 
     // private final SwerveModulePosition[] initialModule = new SwerveModulePosition(0, 0)
     private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(m_frontRightLocation, m_frontLeftLocation, m_backLeftLocation, m_backRightLocation);
 
-    public final SwerveDriveOdometry m_odometry;
-    public final SwerveDrivePoseEstimator m_visionOdometry;
-    
 
     //INITIAL POSITIONS to help define swerve drive odometry. THis was a headache
     public SwerveModulePosition positionFrontLeft = new SwerveModulePosition(0.0,new Rotation2d(0.0));
@@ -92,27 +89,93 @@ public class Drivetrain extends SubsystemBase {
     public SwerveDriveKinematics m_initialStates; 
     public SwerveModulePosition[] positions = new SwerveModulePosition[4];
     
+    public final SwerveDriveOdometry m_odometry;
+    public final SwerveDrivePoseEstimator m_visionOdometry;
+    public final SwerveDrivePoseEstimator m_placeOdometry; //new SwerveDrivePoseEstimator(m_kinematics, null, null, getCurrentPose2d());
+    
+    
     
     //Constructor
     public Drivetrain() {
+        m_visionSubsystem = new VisionSubsystem();
         boolean justBecause = true;
         m_initialStates = new SwerveDriveKinematics(m_frontRightLocation, m_frontLeftLocation, m_backLeftLocation, m_backRightLocation);
         var initialStates = m_initialStates.toSwerveModuleStates( new ChassisSpeeds(0, 0, 0));
-        
-        m_visionOdometry = new SwerveDrivePoseEstimator(m_kinematics, navx.getRotation2d(), initialPositions, new Pose2d(), new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.01, 0.01, 0.01), new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.01, 0.01, 0.01)); //These standard devs are just placeholders, we redifine in vision subsystem
+
+        m_placeOdometry = new SwerveDrivePoseEstimator(m_kinematics, navx.getRotation2d(), initialPositions, new Pose2d(), new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.01, 0.01, 0.01), new MatBuilder<>(Nat.N3(), Nat.N1()).fill(m_visionSubsystem.placeXStdDev, m_visionSubsystem.placeYStdDev, 0.01));
+
+        m_visionOdometry = new SwerveDrivePoseEstimator(m_kinematics, navx.getRotation2d(), initialPositions, new Pose2d(), new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.01, 0.01, 0.01), new MatBuilder<>(Nat.N3(), Nat.N1()).fill(m_visionSubsystem.dist0XStdDev, m_visionSubsystem.dist0YStdDev, 0.01)); //These standard devs are just placeholders, we redifine in vision subsystem
         m_odometry = new SwerveDriveOdometry(
             m_kinematics, 
             navx.getRotation2d(), initialPositions
         );
-        m_visionSubsystem = new VisionSubsystem();
-        
+        // m_visionSubsystem = new VisionSubsystem();
     }
 
     @Override
     public void periodic () {
         updateOdometry();
-        SmartDashboard.putNumber("xOdometry", getCurrentPose2d().getX());
+        //SmartDashboard.putNumber("xOdometry", getCurrentPose2d().getX());
 
+    }
+
+    public void instantiatePlaceOdometry () {
+        if (m_visionSubsystem.canWePlace() && m_visionSubsystem.getRelativePose()[0] != 0) {
+            m_placeOdometry.resetPosition(navx.getRotation2d(), initialPositions,new Pose2d(new Translation2d(m_visionSubsystem.getRelativePose()[2], m_visionSubsystem.getVisionTags()[0]), navx.getRotation2d()));
+            donePlace = true;
+        } else {
+            donePlace = false;
+        }
+
+    }
+
+    public void coneAutoPlace() {
+        
+    }
+
+    public void controlAutoPlace() {
+        double maxSpeed = .2;
+        double yPosition = .5; //in meters
+        double xPosition = .2; ///in meters
+        double currentX = m_placeOdometry.getEstimatedPosition().getX();
+        double currentY = m_placeOdometry.getEstimatedPosition().getY();
+        double xControl = xPosition - currentX;
+
+        double yControl;
+        double rotControl = -navx.getRotation2d().getRadians()/4;
+
+        if (Math.abs(xControl) > maxSpeed) {
+            if (xControl> 0) {
+                xControl = maxSpeed;
+            } else {
+                xControl = -maxSpeed;
+            }
+        }
+        
+        if (currentY > 0 ) {
+            yControl = yPosition - currentY;
+
+            if (Math.abs(yControl) > maxSpeed) {
+                yControl = maxSpeed;
+            }
+            
+            drive(xControl, -yControl/3, rotControl, true, false); // goes to either side of a node, pretty wild
+        } else {
+            yControl = yPosition + currentY;
+            if (Math.abs(yControl) > maxSpeed) {
+                yControl = -maxSpeed;
+            }
+
+            drive(xControl, -yControl, rotControl, true, false);
+
+        }
+
+        if (Math.abs(xControl) <= .05 && Math.abs(yControl) <= .05) {
+            donePlace = false;
+        }
+
+    
+        // drive(kMaxSpeed, kMaxAngularSpeed, anglePreviousRoll, isBalanced(), isBalanced());
     }
     /**
      * Method to drive the robot using joystick info.
@@ -140,10 +203,10 @@ public class Drivetrain extends SubsystemBase {
             m_backRight.setDesiredState(swerveModuleStates[3]);
         }
         else {
-            m_backLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d(3 * (Math.PI / 4))));
-            m_frontLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d((Math.PI / 4))));
+            m_backLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d(3*(Math.PI / 4))));
+            m_frontLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d( (Math.PI / 4))));
             m_backRight.setDesiredState(new SwerveModuleState(0, new Rotation2d((Math.PI / 4))));
-            m_frontRight.setDesiredState(new SwerveModuleState(0, new Rotation2d(3* (Math.PI / 4))));
+            m_frontRight.setDesiredState(new SwerveModuleState(0, new Rotation2d(3*(Math.PI / 4))));
         }
 
     }
@@ -182,17 +245,24 @@ public class Drivetrain extends SubsystemBase {
         positions[3] = new SwerveModulePosition(m_frontRight.getDifferentState().speedMetersPerSecond, m_frontRight.getState().angle);
        
 
-        
+        Pose2d m_placeStuff =  m_placeOdometry.updateWithTime(Timer.getFPGATimestamp(), navx.getRotation2d(), positions);
         Pose2d m_distance = m_odometry.update(navx.getRotation2d(), positions);
         Pose2d m_visionDistance = m_visionOdometry.updateWithTime(Timer.getFPGATimestamp(), navx.getRotation2d(), positions);
         if (m_visionSubsystem.validVision(navx)) {
             m_visionSubsystem.visionOdometryUpdate(m_visionOdometry, navx.getRotation2d());
         }
+        if (m_visionSubsystem.canWePlace()) {
+            m_placeOdometry.addVisionMeasurement(new Pose2d(new Translation2d(-m_visionSubsystem.getRelativePose()[2], m_visionSubsystem.getRelativePose()[0]), navx.getRotation2d()), Timer.getFPGATimestamp());
+        }
+
+        
 
         SmartDashboard.putNumber("VisOdometry X", m_visionDistance.getX());
         SmartDashboard.putNumber("VisOdometry Y", m_visionDistance.getY());
         SmartDashboard.putNumber("VisRotation", getCurrentPose2d().getRotation().getDegrees());
-
+        SmartDashboard.putNumber("PlaceOdometry X", m_placeStuff.getX());
+        SmartDashboard.putNumber("PlaceOdometry Y", m_placeStuff.getY());
+        
         SmartDashboard.putNumber("Odometry X", m_distance.getX());
         SmartDashboard.putNumber("Odometry Y", m_distance.getY());
         SmartDashboard.putNumber("Rotation", getCurrentPose2d().getRotation().getDegrees());
@@ -232,8 +302,8 @@ public class Drivetrain extends SubsystemBase {
         double dPitch = thisPitch - anglePreviousPitch; 
         double dRoll = thisRoll - anglePreviousRoll;
     
-            xControl = thisPitch*kPBal; //+ (dPitch/dt) * kDBal; //xController.calculate(-Objects.navx.getPitch(), 0);//(-Objects.navx.getPitch()*kPBal); 
-            yControl = thisRoll*kPBal;// + (dRoll/dt) * kDBal;//yController.calculate(Objects.navx.getRoll(), 0);//(*kPBal);
+            xControl = -thisPitch*kPBal; //+ (dPitch/dt) * kDBal; //xController.calculate(-Objects.navx.getPitch(), 0);//(-Objects.navx.getPitch()*kPBal); 
+            yControl = -thisRoll*kPBal;// + (dRoll/dt) * kDBal;//yController.calculate(Objects.navx.getRoll(), 0);//(*kPBal);
             anglePreviousPitch = thisPitch;
             anglePreviousRoll = thisRoll;
             SmartDashboard.putNumber("PitchGyro", dPitch/dt);
@@ -242,6 +312,6 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public boolean isBalanced() {
-        return (Math.abs(navx.getPitch())<= 5 && Math.abs(navx.getRoll())<=5 ) && (Math.abs(navx.getRawGyroX()) <= 5 && (Math.abs(navx.getRawGyroY()) <= 5));
+        return /**(Math.abs(navx.getPitch())<= 5 && Math.abs(navx.getRoll())<=5 ) && */ (Math.abs(navx.getRawGyroX()) >= 9 || (Math.abs(navx.getRawGyroY()) >= 9));
       }
 }

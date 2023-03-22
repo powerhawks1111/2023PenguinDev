@@ -25,12 +25,12 @@ public class OuttakeCone extends CommandBase{
     
     @Override
     public void execute() {
-        m_intakeSubsystem.runIntake(-.65);
+        m_intakeSubsystem.runIntake(-.75);
     }
 
     @Override
     public boolean isFinished() {
-        return m_timer.get() >= .25;
+        return m_timer.get() >= .35;
         //return false;
     }
 

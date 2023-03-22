@@ -29,10 +29,10 @@ public class Score extends CommandBase{
     @Override 
     public void execute() {
         if (m_height == "Low") {
-            m_armSubsystem.positionArm(Math.PI/6);
+            m_armSubsystem.positionArm(Math.PI/8);
         }
         if (m_height == "Mid") {
-            m_armSubsystem.positionArm(Math.PI/2);
+            m_armSubsystem.positionArm(Math.PI/2-.1);
         }
         if (m_height == "High") {
             m_armSubsystem.positionArm(3.1);

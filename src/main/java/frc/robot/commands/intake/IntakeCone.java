@@ -33,7 +33,7 @@ public class IntakeCone extends CommandBase{
     @Override
     public void execute() {
         if (!m_intakeSubsystem.hasCone()) {
-            m_intakeSubsystem.runIntake(.75);
+            m_intakeSubsystem.runIntake(.95);
         }
     }
 
