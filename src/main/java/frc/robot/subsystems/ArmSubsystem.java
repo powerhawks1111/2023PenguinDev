@@ -31,8 +31,8 @@ public class ArmSubsystem extends SubsystemBase {
     private double kFF = 0;
     private double kMaxOutput = 1;
     private double kMinOutput = -1;
-    private double maxVel = 8000;
-    private double maxAcc = 7250;
+    private double maxVel = 9000;
+    private double maxAcc = 9500;
     private boolean isCalibrated = false; 
     private double calculatedMotorHome = 0; 
     private double gearRatio = 189; //I think 195
@@ -44,7 +44,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 
     private static DoubleSolenoid armPistons = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 0);
-    //private static Compressor compressor = new Compressor(1, PneumaticsModuleType.REVPH);
+    private static Compressor compressor = new Compressor(1, PneumaticsModuleType.REVPH);
 
     public ArmSubsystem(DigitalInput input) {
         coneDetector = input;

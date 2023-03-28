@@ -19,7 +19,7 @@ public class CalibrateStuff extends SequentialCommandGroup{
        
         //addRequirements(m_intakeSubSystem);
         addCommands(
-            // new WaitCommand(4),
+            new WaitCommand(.1),
             new CalibrateArm(m_armSubsystem),
             new CalibrateIntake(m_intakeSubSystem),
             new PrintCommand("done calibrating")

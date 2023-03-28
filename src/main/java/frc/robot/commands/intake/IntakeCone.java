@@ -17,11 +17,13 @@ public class IntakeCone extends CommandBase{
     
     private Timer m_timer = new Timer();
     private HoldTight m_holdTight;
+    private boolean m_conditional = false;
     boolean state = false; //this is used to see if we've picked up a cone and stuff
 
-    public IntakeCone(IntakeSubSystem intakeSubSystem, ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem, HoldTight holdTight) {
+    public IntakeCone(IntakeSubSystem intakeSubSystem, ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem, HoldTight holdTight, boolean conditional) {
         m_intakeSubsystem = intakeSubSystem;
         m_holdTight = holdTight; 
+        m_conditional = conditional;
         addRequirements(m_intakeSubsystem);
     }
 
@@ -33,14 +35,14 @@ public class IntakeCone extends CommandBase{
     @Override
     public void execute() {
         if (!m_intakeSubsystem.hasCone()) {
-            m_intakeSubsystem.runIntake(.95);
+            m_intakeSubsystem.runIntake(1);
         }
     }
 
     @Override
     public boolean isFinished() {
         state = ((m_intakeSubsystem.checkAmps()) && m_timer.get() > 0.5) || m_intakeSubsystem.hasCone();
-        if (state) {
+        if (state && m_conditional) {
             m_holdTight.schedule();
         }
         return state;

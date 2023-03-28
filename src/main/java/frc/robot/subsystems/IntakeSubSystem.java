@@ -32,14 +32,14 @@ public class IntakeSubSystem extends SubsystemBase {
     private DutyCycle m_TurnPWMEncoder = new DutyCycle( new DigitalInput(rotatePWMPort));
     private AHRS navx = new AHRS();
     private double home = 0.356;
-    private double kP = .00025;
+    private double kP = .00023;
     private double kI = 0;
     private double kD = 0;
     private double kFF = 0;
     private double kMaxOutput = 1;
     private double kMinOutput = -1;
-    private double maxVel = 5000;
-    private double maxAcc = 5000;
+    private double maxVel = 7000;
+    private double maxAcc = 7000;
     private boolean isCalibrated = false; 
     private double calculatedMotorHome = 0; 
     private double gearRatio = 40; // was 35
@@ -98,6 +98,8 @@ public class IntakeSubSystem extends SubsystemBase {
         rotateMotor.setIdleMode(IdleMode.kCoast);
        
     }
+
+
     public double getIntakePosition() {
         return 2*Math.PI*((m_TurnPWMEncoder.getOutput() - home) % 1);
     }
@@ -148,6 +150,17 @@ public class IntakeSubSystem extends SubsystemBase {
         m_pidController.setReference(transformedPosition, CANSparkMax.ControlType.kSmartMotion, smartMotionSlot);
     }
 
+    public void moveUp () {
+        transformedPosition = transformedPosition + .1;
+        m_pidController.setReference(transformedPosition, CANSparkMax.ControlType.kSmartMotion, smartMotionSlot);
+
+    }
+
+    public void moveDown() {
+        transformedPosition = transformedPosition -.1;
+        m_pidController.setReference(transformedPosition , CANSparkMax.ControlType.kSmartMotion, smartMotionSlot);
+        
+    }
 
     /**
      * Check if the pickup motor's amperage passed the set limit

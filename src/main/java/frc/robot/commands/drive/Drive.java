@@ -52,9 +52,9 @@ public class Drive extends CommandBase {
 
         //TODO MAP THIS BUTTON maybe done
         if (!morePrecise) {
-            m_drivetrain.drive(xSpeed*.9, ySpeed*.9, (rot +.0001 )*1.33, true, false); //final movement; sends drive values to swerve
+            m_drivetrain.drive(xSpeed*.9, ySpeed*.9, (rot +.0001 )*.9, true, false); //final movement; sends drive values to swerve
         } else {
-            m_drivetrain.drive(xSpeed*.17, ySpeed*.17, (rot +.0001 )/3, true, false); //final movement; sends drive values to swerve
+            m_drivetrain.drive(xSpeed*.3, ySpeed*.3, (rot +.0001 )/3, true, false); //final movement; sends drive values to swerve
 
         }
     }

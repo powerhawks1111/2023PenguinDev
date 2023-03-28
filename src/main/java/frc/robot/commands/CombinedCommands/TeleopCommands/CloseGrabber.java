@@ -17,7 +17,7 @@ public class CloseGrabber extends SequentialCommandGroup{
         m_grabberSubsystem = grabberSubsystem;
       
         addCommands(
-            new PositionGrabber(grabberSubsystem, 25)
+            new PositionGrabber(grabberSubsystem, 28)
         );
 }
 }

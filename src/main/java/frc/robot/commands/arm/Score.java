@@ -30,9 +30,11 @@ public class Score extends CommandBase{
     public void execute() {
         if (m_height == "Low") {
             m_armSubsystem.positionArm(Math.PI/8);
+            m_armSubsystem.deployPistons(false);
         }
         if (m_height == "Mid") {
-            m_armSubsystem.positionArm(Math.PI/2-.1);
+            m_armSubsystem.positionArm(Math.PI/2);
+            m_armSubsystem.deployPistons(false);
         }
         if (m_height == "High") {
             m_armSubsystem.positionArm(3.1);

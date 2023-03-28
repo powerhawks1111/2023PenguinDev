@@ -18,8 +18,8 @@ public class HumanPlayerStation extends SequentialCommandGroup{
         m_grabberSubsystem = grabberSubsystem;
         m_holdTight = holdTight;
         addCommands(
-            new PositionIntake(m_intakeSubSystem, Math.PI/2.15),
-            new IntakeCone(m_intakeSubSystem, m_armSubsystem, m_grabberSubsystem, m_holdTight)
+            new PositionIntake(m_intakeSubSystem, Math.PI/2.1), // was 2.15
+            new IntakeCone(m_intakeSubSystem, m_armSubsystem, m_grabberSubsystem, m_holdTight, true)
         );
     }
 }

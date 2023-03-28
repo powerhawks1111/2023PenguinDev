@@ -31,13 +31,13 @@ public class HoldTight extends SequentialCommandGroup {
 
             
             new ParallelCommandGroup(
-                new OpenGrabber(m_grabberSubsystem),
+                new PositionGrabber(m_grabberSubsystem, 3),
                 new PositionIntakeConditionally(m_intakeSubsytem),
-                new SequentialCommandGroup(new WaitCommand(.5), new ControlArm(m_armSubsystem, Math.PI/8))
+                new SequentialCommandGroup(new WaitCommand(.25), new ControlArm(m_armSubsystem, Math.PI/8))
             ),
             //!m_armSubsystem.coneDetector() ? new PositionIntake(intakeSubSystem, 3.3) : new WaitCommand(0),
-            new PositionConditionally(m_armSubsystem),
-            new WaitCommand(.25)
+            new PositionConditionally(m_armSubsystem)
+            // new WaitCommand(.25)
             //new PositionGrabber(m_grabberSubsystem, 14) //normally 22
         );
     }

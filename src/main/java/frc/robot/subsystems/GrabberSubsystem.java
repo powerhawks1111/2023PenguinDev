@@ -14,7 +14,7 @@ public class GrabberSubsystem extends SubsystemBase {
     private CANSparkMax m_grabMotor = new CANSparkMax(grabMotor, MotorType.kBrushless);
     private double limit = .01; //amps to stop the grabber calibration at, two works well
     private double openPosition = 0;
-    private double range = 30;// the amount of rotations until we close the grabber
+    private double range = 35;// the amount of rotations until we close the grabber
     private double cubePosition = 1;
     private double conePosition = 1;
     private double tolerance = 0.5; //the range of rotation we're happy with with the pid conroller

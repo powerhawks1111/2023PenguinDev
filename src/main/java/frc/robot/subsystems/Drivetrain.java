@@ -51,7 +51,7 @@ public class Drivetrain extends SubsystemBase {
     private double anglePreviousPitch = 0;
     private double xControl = 0;
     private double yControl = 0;
-    public double kPBal = .0145; //.014
+    public double kPBal = .01485; //.014
     public double kDBal = 0.001;//.0019;
     //positions of each swerve unit on the robot
     // private final Translation2d m_frontLeftLocation = new Translation2d(-0.538,  0.538);
@@ -312,6 +312,6 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public boolean isBalanced() {
-        return /**(Math.abs(navx.getPitch())<= 5 && Math.abs(navx.getRoll())<=5 ) && */ (Math.abs(navx.getRawGyroX()) >= 9 || (Math.abs(navx.getRawGyroY()) >= 9));
+        return /**(Math.abs(navx.getPitch())<= 5 && Math.abs(navx.getRoll())<=5 ) && */ (Math.abs(navx.getRawGyroX()) >= 10 || (Math.abs(navx.getRawGyroY()) >= 10));
       }
 }
