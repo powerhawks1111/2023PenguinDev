@@ -12,14 +12,13 @@ import edu.wpi.first.wpilibj.Timer;
 public class BalanceCommand extends CommandBase { 
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private Drivetrain m_drivetrain;
-    Timer timer = new Timer();
-    private double timerNow = 0;
-    private double timerPrevious = 0;
-    private double anglePreviousRoll = 0;
-    private double anglePreviousPitch = 0;
+    // private double timerNow = 0;
+    // private double timerPrevious = 0;
+    // private double anglePreviousRoll = 0;
+    // private double anglePreviousPitch = 0;
     /**
-     * Creates a new ExampleCommand.
-     *
+     * Command for balancing the robot on the charging station
+     * Uses navx gyro outputs
      * @param subsystem The subsystem used by this command.
      */
     public BalanceCommand(Drivetrain subsystem) {
@@ -29,10 +28,7 @@ public class BalanceCommand extends CommandBase {
   
     // Called when the command is initially scheduled.
     @Override
-    public void initialize() {
-      timer.start();
-      
-    }
+    public void initialize() {}
   
     // Called every time the scheduler runs while the command is scheduled.
     @Override

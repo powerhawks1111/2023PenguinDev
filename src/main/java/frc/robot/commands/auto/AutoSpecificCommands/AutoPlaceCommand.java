@@ -1,4 +1,4 @@
-package frc.robot.commands.drive;
+package frc.robot.commands.auto.AutoSpecificCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -8,10 +8,11 @@ import frc.robot.commands.arm.ReleaseConeSlow;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 
-public class AutoPlaceCone extends SequentialCommandGroup {
-    public AutoPlaceCone(ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem) {
+public class AutoPlaceCommand extends SequentialCommandGroup {
+    public AutoPlaceCommand(ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem) {
         addCommands(
             new MoveArmDown(armSubsystem),
+            new WaitCommand(0.75),
             new ReleaseConeSlow(grabberSubsystem)
         );
     }

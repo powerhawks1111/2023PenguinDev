@@ -20,7 +20,7 @@ public class ArmSubsystem extends SubsystemBase {
     private int rightMotor = 10; //actually 10
     private int leftMotor = 9; //acutally 9
     private int axlePWM = 19;
-    private double armHomePosition = 0.436; //1907
+    private double armHomePosition = 0.441; //1907 // .441
     private CANSparkMax m_rightMotor = new CANSparkMax(rightMotor, MotorType.kBrushless); //gear ratio of motor is 155:1
     private CANSparkMax m_leftMotor = new CANSparkMax(leftMotor, MotorType.kBrushless);
     private DutyCycle encoderPWM;
@@ -31,11 +31,11 @@ public class ArmSubsystem extends SubsystemBase {
     private double kFF = 0;
     private double kMaxOutput = 1;
     private double kMinOutput = -1;
-    private double maxVel = 9000;
-    private double maxAcc = 9500;
+    private double maxVel = 9000; //9000
+    private double maxAcc = 9500; //9500
     private boolean isCalibrated = false; 
     private double calculatedMotorHome = 0; 
-    private double gearRatio = 189; //I think 195
+    private double gearRatio = 108; //I think 195
     private int smartMotionSlot = 0;
     private double transformedPosition;
     private boolean isScoringButDangerous = false;
@@ -67,14 +67,11 @@ public class ArmSubsystem extends SubsystemBase {
     public void periodic() {
         if (encoderPWM.getOutput() == 0) {
             DriverStation.reportError("Make sure that the arm is connected to the Navx [Port 5]", false);
-            // throw new NullPointerException(
-                // "Make sure that the arm is connected to the Navx [Port 5]"
-            // );
         }
         SmartDashboard.putBoolean("ConePosition", coneDetector.get());
         isScoringButDangerous = getArmPosition() > Math.PI/2.2;
-        //SmartDashboard.putNumber("Axle rotation", getArmPosition());
-        SmartDashboard.putNumber("Axle rotation", encoderPWM.getOutput());
+        SmartDashboard.putNumber("Axle rotation", getArmPosition());
+        //SmartDashboard.putNumber("Axle rotation", encoderPWM.getOutput());
 
         SmartDashboard.putNumber("Motor Position", m_rightMotor.getEncoder().getPosition());
         // SmartDashboard.putNumber("Left Amps", m_leftMotor.getOutputCurrent());
@@ -83,6 +80,7 @@ public class ArmSubsystem extends SubsystemBase {
 
          //ugh right motor doesn't have an encoder
     }
+
 
     public boolean returnScoringDangerous() {
         return isScoringButDangerous;
@@ -99,8 +97,8 @@ public class ArmSubsystem extends SubsystemBase {
         return -((2*Math.PI)*((encoderPWM.getOutput()-armHomePosition)%1));
     }
     /**
-     * 
-     * @param speed, positive brings the arm up
+     * Run the left and right motors to move the arm
+     * @param speed, positive brings the arm up and vice versa
      */
 
     public void runArmMotors(double speed) { 
@@ -108,19 +106,28 @@ public class ArmSubsystem extends SubsystemBase {
         m_leftMotor.follow(m_rightMotor, true);
     }
 
+    /**
+     * Sets the arm motors in brake mode
+     */
     public void brakeMode () {
         m_leftMotor.setIdleMode(IdleMode.kBrake);
         m_rightMotor.setIdleMode(IdleMode.kBrake);
     }
 
+    /**
+     * Sets the arm motors in coast mode
+     */
     public void coastMode() {
         m_leftMotor.setIdleMode(IdleMode.kCoast);
         m_rightMotor.setIdleMode(IdleMode.kCoast);
     }
 
+    /*
     public void iterateHome(double iteration) {
         calculatedMotorHome = calculatedMotorHome + iteration;
     }
+
+    */
     /**
      * 
      * @param position in radians. 0 radians is straight down
@@ -133,52 +140,83 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     /**
-     * bruh
-     * @param direction true is deploy arm, false is retract arm 
+     * Deploy the arm pistons
+     * @param direction true is deploy, false is retract 
      */
     public void deployPistons(boolean direction) {
-        
         if (direction) {
-            if (getArmPosition() > Math.PI/3) {
+            
                 armPistons.set(DoubleSolenoid.Value.kForward);
-            }
+            
         } else {
-            if (!(getArmPosition() > Math.PI)) {
+           
                 armPistons.set(DoubleSolenoid.Value.kReverse);
-            }
+            
         }
     }
 
+    /**
+     * Set the status of whether the robot is calibrated or not
+     * @param state boolean calibrated or not calibrated
+     */
     public void setCalibrated( boolean state) {
         isCalibrated = state;
     } 
 
+    /**
+     * Calculates the home position of the arm position using position relative from 0 radians (resting)
+     * Value is in motor rotations
+     */
     public void calculateHome () {
         // if (!(encoderPWM.getOutput() == 0)) {
-            calculatedMotorHome = m_leftMotor.getEncoder().getPosition() - (getArmPosition()/(2*Math.PI) * gearRatio);
-            isCalibrated = true;
-            SmartDashboard.putNumber("Home Motor Position", calculatedMotorHome);
+        calculatedMotorHome = m_rightMotor.getEncoder().getPosition() - (getArmPosition()/(2*Math.PI) * gearRatio);
+        isCalibrated = true;
+        SmartDashboard.putNumber("Home Motor Position", calculatedMotorHome);
         // } else {
            // m_leftMotor.getEncoder().setPosition(usualHome);
 
         // }
-        
     }
 
+    /**
+     * Move the arm to its home position
+     */
     public void positionConditionally () {
-        if (true) {
-            positionArm(0);
-        } else {
-            positionArm(-.1);
-        }
+        positionArm(-.05);
     }
+
+    /**
+     * Return the calibrated status of the arm
+     * @return calibration status
+     */
     public boolean isCalibrated() {
         return isCalibrated;
     }
+
+    /**
+     * Return the status of whether the arm is close to its intended position
+     */
     public boolean closeToPosition () {
-        return (Math.abs(m_leftMotor.getEncoder().getPosition() - transformedPosition) <= 2.5);
+        return (Math.abs(m_rightMotor.getEncoder().getPosition() - transformedPosition) <= 2.5);
     }
+
+    public void moveUp() {
+        // positionArm(getArmPosition() + .1);
+        transformedPosition += 5;
+        m_pidController.setReference(transformedPosition , CANSparkMax.ControlType.kSmartMotion, smartMotionSlot);
+    }
+
+    public void moveDown() {
+        // positionArm(getArmPosition() - .1);
+        transformedPosition -= 5;
+        m_pidController.setReference(transformedPosition , CANSparkMax.ControlType.kSmartMotion, smartMotionSlot);
+    }
+
+    
+
+    /* Deprecated (not using the beam breaker anymore)
     public boolean coneDetector() {
         return coneDetector.get();
     }
+    */
 }

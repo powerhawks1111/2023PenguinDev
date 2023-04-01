@@ -6,6 +6,11 @@ import frc.robot.subsystems.IntakeSubSystem;
 public class SetCone extends CommandBase {
     private IntakeSubSystem m_intakeSubSystem;
     private boolean m_state;
+    /**
+     * 
+     * @param intakeSubSystem
+     * @param state
+     */
     public SetCone (IntakeSubSystem intakeSubSystem, boolean state) {
         m_intakeSubSystem = intakeSubSystem;
         m_state = state;

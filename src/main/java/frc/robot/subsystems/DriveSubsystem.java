@@ -12,7 +12,12 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.drive.Drive;
 import frc.robot.variables.Objects;
 
-public class DriveSubsystem extends SubsystemBase{
+public class DriveSubsystem extends SubsystemBase {
+
+    /*
+     * THIS FILE IS NOT BEING USED 
+     * REFER to Drivetrain.java
+     */
 
    
     // public final Drivetrain m_drive = new Drivetrain();

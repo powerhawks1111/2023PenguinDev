@@ -40,25 +40,24 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.variables.Objects;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
-
-
-
-public class turnCommandTest extends CommandBase{
-
+public class turnCommand extends CommandBase {
     private Drivetrain m_drivetrain;
-    public turnCommandTest (Drivetrain drivetrain) {
+    /**
+     * Turn the robot 
+     * @param drivetrain
+     */
+    public turnCommand(Drivetrain drivetrain) {
         m_drivetrain = drivetrain;
         addRequirements(m_drivetrain);
     }
 
-
     @Override
-    public void execute () {
+    public void execute() {
         m_drivetrain.drive(0, 0, .05, false, false);
     }
 
     @Override 
-    public boolean isFinished () {
+    public boolean isFinished() {
         return false;
     }
 }

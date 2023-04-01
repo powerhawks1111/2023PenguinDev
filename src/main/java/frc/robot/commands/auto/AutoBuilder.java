@@ -14,7 +14,11 @@ import frc.robot.commands.CombinedCommands.TeleopCommands.ScoreLow;
 import frc.robot.commands.CombinedCommands.TeleopCommands.ScoreMid;
 import frc.robot.commands.arm.ReturnHome;
 import frc.robot.commands.auto.AutoSpecificCommands.AutoConditional;
+import frc.robot.commands.auto.AutoSpecificCommands.AutoScoreHigh;
+import frc.robot.commands.auto.AutoSpecificCommands.AutoScoreLow;
 import frc.robot.commands.auto.AutoSpecificCommands.ComplicatedReturnHome;
+import frc.robot.commands.auto.AutoSpecificCommands.ReverseReturnHome;
+import frc.robot.commands.auto.AutoSpecificCommands.ReverseScoreHigh;
 import frc.robot.commands.drive.BalanceCommand;
 import frc.robot.commands.drive.StayStill;
 import frc.robot.commands.intake.DefaultPositionIntake;
@@ -62,8 +66,7 @@ import frc.robot.variables.Objects;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 
-public class AutoBuilder extends CommandBase{
-
+public class AutoBuilder extends CommandBase {
     List<PathPlannerTrajectory> pathGroup;
     private Drivetrain m_drivetrain;
     public IntakeSubSystem m_intakeSubSystem;
@@ -73,24 +76,31 @@ public class AutoBuilder extends CommandBase{
     
     Command fullAuto;
     HashMap<String, Command> eventMap = new HashMap<>();
-    
 
-    public AutoBuilder ( Drivetrain drivetrain, ArmSubsystem armSubsystem, IntakeSubSystem intakeSubsystem, GrabberSubsystem grabberSubsystem, String autoPath, double maxVelocity, double maxAcceleration) { //TODO GET CONSTANTS RIGHT
+    /**
+     * Setup PathPlanner and configure all of the commands for use in PathPlanner
+     * @param drivetrain
+     * @param armSubsystem
+     * @param intakeSubsystem
+     * @param grabberSubsystem
+     * @param autoPath specified auto path
+     * @param maxVelocity max velocity for the specified auto path
+     * @param maxAcceleration max acceleration for the specified auto
+     */
+    public AutoBuilder (Drivetrain drivetrain, ArmSubsystem armSubsystem, IntakeSubSystem intakeSubsystem, GrabberSubsystem grabberSubsystem, String autoPath, double maxVelocity, double maxAcceleration) { //TODO GET CONSTANTS RIGHT
         pathGroup = PathPlanner.loadPathGroup(autoPath, new PathConstraints(maxVelocity, maxAcceleration));
         System.out.println(autoPath);
         m_drivetrain = drivetrain;
         m_intakeSubSystem = intakeSubsystem;
         m_armSubsystem = armSubsystem;
         m_grabberSubsystem = grabberSubsystem;
-        eventMap.put("turnCommand", new turnCommandTest(m_drivetrain));
+        eventMap.put("turnCommand", new turnCommand(m_drivetrain));
         eventMap.put("BalanceCommand", new BalanceCommand(m_drivetrain));
         eventMap.put("hold", new HoldCommand(m_drivetrain));
-        eventMap.put("CloseGrabber", new CloseGrabber(m_grabberSubsystem));
-        eventMap.put("OpenGrabber", new OpenGrabber(m_grabberSubsystem));
-        eventMap.put("ScoreHigh", new ScoreHigh(m_intakeSubSystem, m_armSubsystem, m_grabberSubsystem));
-        eventMap.put("ScoreLow", new ScoreLow(m_intakeSubSystem, m_armSubsystem, m_grabberSubsystem));
+        eventMap.put("ScoreHigh", new AutoScoreHigh(m_armSubsystem, m_intakeSubSystem, m_grabberSubsystem));
+        eventMap.put("ScoreLow", new AutoScoreLow(m_armSubsystem, m_grabberSubsystem, m_intakeSubSystem));
         eventMap.put("ScoreMid", new ScoreMid(m_intakeSubSystem, m_armSubsystem, m_grabberSubsystem));
-        eventMap.put("ReturnHome", new ComplicatedReturnHome(m_intakeSubSystem, m_armSubsystem, m_grabberSubsystem));
+        eventMap.put("ReturnHome", new ReverseReturnHome(m_armSubsystem, m_intakeSubSystem, m_grabberSubsystem));
         eventMap.put("DeployIntake", new AutoConditional(m_intakeSubSystem, m_armSubsystem, m_grabberSubsystem));
         eventMap.put("StayStill", new StayStill(m_drivetrain));
         eventMap.put("HoldTight", new HoldTight(m_intakeSubSystem, m_armSubsystem, m_grabberSubsystem));
@@ -124,6 +134,4 @@ public class AutoBuilder extends CommandBase{
     public boolean isFinished () {
         return true; 
     }
-    
-
 }

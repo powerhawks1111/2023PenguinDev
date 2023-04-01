@@ -34,7 +34,7 @@ public class SwerveModule extends SubsystemBase {
         private static final double kWheelCircumference = Math.PI * kWheelDiameter;
         private static final double rpmToVelocityScaler = (kWheelCircumference / 6.12) / 60; //SDS Mk3 standard gear ratio from motor to wheel, divide by 60 to go from secs to mins
     //kWheelCircumference used to be 
-        private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed;
+        private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed; // radians per second
         private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
 
         private final CANSparkMax m_driveMotor;
@@ -50,8 +50,7 @@ public class SwerveModule extends SubsystemBase {
         private int turnPWMChannel;
         
 
-        // Gains are for example purposes only - must be determined for your own robot!
-        private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(1, 0, 0, new TrapezoidProfile.Constraints(kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration) );
+        private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(1, 0, 0, new TrapezoidProfile.Constraints(kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
 
         /**
          * Constructs a SwerveModule with a drive motor, turning motor, drive encoder and turning encoder.

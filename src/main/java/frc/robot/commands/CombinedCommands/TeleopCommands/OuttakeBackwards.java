@@ -7,13 +7,19 @@ import frc.robot.commands.intake.PositionIntake;
 import frc.robot.subsystems.IntakeSubSystem;
 
 public class OuttakeBackwards extends SequentialCommandGroup {
-    private IntakeSubSystem m_intakeSubSystem;
-    public OuttakeBackwards (IntakeSubSystem intakeSubSystem) {
-        m_intakeSubSystem = intakeSubSystem;
+    /*
+     * THIS FILE IS NOT BEING USED 
+     */
+    /**
+     * Outtake a cone
+     * Alternative method to scoring a cone on the lower level
+     * @param intakeSubSystem
+     */
+    public OuttakeBackwards(IntakeSubSystem intakeSubSystem) {
         addCommands(
-            new PositionIntake(m_intakeSubSystem, 3.15),
+            new PositionIntake(intakeSubSystem, 3.15),
             new WaitCommand(.5),
-            new OuttakeCone(m_intakeSubSystem)
+            new OuttakeCone(intakeSubSystem)
         );
     }
 }

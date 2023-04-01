@@ -1,7 +1,5 @@
 package frc.robot.commands.arm;
 
-import java.util.ResourceBundle.Control;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 
@@ -9,6 +7,11 @@ public class ControlArm extends CommandBase {
     private ArmSubsystem m_armSubsystem;
     private double m_position;
 
+    /**
+     * Position the arm to a set position 
+     * @param subsytem ArmSubsytem
+     * @param position position in radians
+     */
     public ControlArm(ArmSubsystem subsytem, double position) {
         m_armSubsystem = subsytem;
         m_position = position;
@@ -31,8 +34,8 @@ public class ControlArm extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        //m_armSubsystem.deployPistons(false);
-    //    m_armSubsystem.runArmMotors(0);
+        // m_armSubsystem.deployPistons(false);
+        // m_armSubsystem.runArmMotors(0);
     }
 
 

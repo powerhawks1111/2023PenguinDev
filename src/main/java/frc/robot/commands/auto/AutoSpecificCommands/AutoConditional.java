@@ -7,21 +7,20 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.IntakeSubSystem;
 
-public class AutoConditional extends SequentialCommandGroup{
-    private IntakeSubSystem m_intakeSubsytem;
-    private ArmSubsystem m_armSubsystem;
-    private GrabberSubsystem m_grabberSubsystem;
+public class AutoConditional extends SequentialCommandGroup {
     private HoldTight m_holdTight;
-    public AutoConditional(IntakeSubSystem intakeSubSystem, ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem) {
-        m_intakeSubsytem = intakeSubSystem;
-        m_armSubsystem = armSubsystem;
-        m_grabberSubsystem = grabberSubsystem;
-       
-        m_holdTight = new HoldTight(m_intakeSubsytem, m_armSubsystem, m_grabberSubsystem);
+    /**
+     * Intake a cone during the autonomous period
+     * @param intakeSubsystem
+     * @param armSubsystem
+     * @param grabberSubsystem
+     */
+    public AutoConditional(IntakeSubSystem intakeSubsystem, ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem) {
         addCommands(
-            new PositionIntake(m_intakeSubsytem, .275), //.0891
-            new IntakeCone(m_intakeSubsytem, m_armSubsystem, m_grabberSubsystem, m_holdTight, false),
-            new PositionIntake(m_intakeSubsytem, 2 * Math.PI / 3)
+            new PositionIntake(intakeSubsystem, .275), //.0891
+            new IntakeCone(intakeSubsystem, armSubsystem, grabberSubsystem, m_holdTight, false),
+            new PositionIntake(intakeSubsystem, 2 * Math.PI / 3),
+            new HoldTight(intakeSubsystem, armSubsystem, grabberSubsystem)
         );
     }
 }

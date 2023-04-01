@@ -9,15 +9,14 @@ import frc.robot.commands.arm.Score;
 import frc.robot.commands.intake.OuttakeCone;
 import frc.robot.subsystems.*;
 
-public class OpenGrabber extends SequentialCommandGroup{
-    private IntakeSubSystem m_intakeSubsytem;
-    private ArmSubsystem m_armSubsystem;
-    private GrabberSubsystem m_grabberSubsystem;
-    public OpenGrabber(GrabberSubsystem grabberSubsystem) {
-        m_grabberSubsystem = grabberSubsystem;
-      
+public class OpenGrabber extends SequentialCommandGroup {
+    /**
+     * Move the grabber to its open position
+     * @param grabberSubsystem
+     */
+    public OpenGrabber(GrabberSubsystem grabberSubsystem) {      
         addCommands(
             new PositionGrabber(grabberSubsystem, 0)
         );
-}
+    }
 }

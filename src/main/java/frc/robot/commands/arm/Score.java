@@ -7,17 +7,16 @@ import frc.robot.subsystems.GrabberSubsystem;
 
 public class Score extends CommandBase{ 
     private ArmSubsystem m_armSubsystem;
-    private GrabberSubsystem m_grabberSubsystem;
-    private Joystick m_driverJoystick;
     private String m_height;
 
-
-    public Score (ArmSubsystem armSubsystem, String height) {
+    /**
+     * Score the cone at the specified position
+     * @param armSubsystem
+     * @param height low, mid, or high
+     */
+    public Score(ArmSubsystem armSubsystem, String height) {
         m_armSubsystem = armSubsystem;
-        
         m_height = height;
-        
-
         addRequirements(m_armSubsystem);
     }
     @Override
@@ -37,8 +36,10 @@ public class Score extends CommandBase{
             m_armSubsystem.deployPistons(false);
         }
         if (m_height == "High") {
-            m_armSubsystem.positionArm(3.1);
-            m_armSubsystem.deployPistons(true);
+            m_armSubsystem.positionArm(3.14);
+            if (m_armSubsystem.getArmPosition() > Math.PI / 2) {
+                m_armSubsystem.deployPistons(true);
+            }
         }
     }
 

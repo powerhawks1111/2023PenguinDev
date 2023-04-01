@@ -3,29 +3,24 @@ package frc.robot.commands.auto.AutoSpecificCommands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.CombinedCommands.TeleopCommands.CloseGrabber;
-import frc.robot.commands.CombinedCommands.TeleopCommands.OpenGrabber;
-import frc.robot.commands.arm.ReturnHome;
 import frc.robot.commands.CombinedCommands.TeleopCommands.*;
 import frc.robot.commands.intake.PositionIntake;
 import frc.robot.subsystems.*;
 
-public class ComplicatedReturnHome extends SequentialCommandGroup{
-    private IntakeSubSystem m_intakeSubsystem;
-    private ArmSubsystem m_armSubsystem;
-    private GrabberSubsystem m_grabberSubsystem;
-    public ComplicatedReturnHome (IntakeSubSystem intakeSubSystem, ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem) {
-        m_intakeSubsystem = intakeSubSystem;
-        m_grabberSubsystem = grabberSubsystem;
-        m_armSubsystem = armSubsystem;
+public class ComplicatedReturnHome extends SequentialCommandGroup {
+    /**
+     * Set the intake, arm, and grabber to their home positions
+     * @param intakeSubSystem
+     * @param armSubsystem
+     * @param grabberSubsystem
+     */
+    public ComplicatedReturnHome (IntakeSubSystem intakeSubsystem, ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem) {
         addCommands(
-            new OpenGrabber(m_grabberSubsystem),
+            new OpenGrabber(grabberSubsystem),
             new WaitCommand(.25), 
-            new PositionIntake(m_intakeSubsystem, 2*Math.PI/3),
-            new TeleopReturnHome(m_armSubsystem, m_grabberSubsystem)
+            new PositionIntake(intakeSubsystem, 2*Math.PI/3),
+            new TeleopReturnHome(armSubsystem, grabberSubsystem)
             // new Open
-
-
         );
     }
 }

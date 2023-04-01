@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class GrabberSubsystem extends SubsystemBase {
     private int grabMotor = 11; //should be 11
     private CANSparkMax m_grabMotor = new CANSparkMax(grabMotor, MotorType.kBrushless);
-    private double limit = .01; //amps to stop the grabber calibration at, two works well
+    private double limit = 8; //amps to stop the grabber calibration at, two works well
     private double openPosition = 0;
     private double range = 35;// the amount of rotations until we close the grabber
     private double cubePosition = 1;
@@ -29,26 +29,24 @@ public class GrabberSubsystem extends SubsystemBase {
     private double kMinOutput = -.5;
     private boolean calibrated = true; //TODO FIX THIS
 
-
     public GrabberSubsystem() {
         m_pidController.setP(kP);
         m_pidController.setI(kI);
         m_pidController.setD(kD);
         m_pidController.setFF(kFF);
         m_pidController.setOutputRange(kMinOutput, kMaxOutput);
-
     }
     
     @Override
     public void periodic() {
         //SmartDashboard.putNumber("openPosition", openPosition);
         //SmartDashboard.putNumber("CurrentPosition", m_grabMotor.getEncoder().getPosition());
-        //SmartDashboard.putNumber("Grabber Amps", m_grabMotor.getOutputCurrent());
+        SmartDashboard.putNumber("Grabber Amps", m_grabMotor.getOutputCurrent());
     }
 
     /**
      * Run the grabber motor at a set speed
-     * Positive speed closes the grabber and vice versa
+     * Positive speed closes the grabber
      * @param speed -1 to +1
      */
     public void runGrabber(double speed) {
@@ -88,12 +86,12 @@ public class GrabberSubsystem extends SubsystemBase {
 
     /**
      * Spin the grab motor until it reaches its set position
-     * Doesn't spin the motor if the final position is out of the range
+     * Doesn't spin the motor if the final position is out of the range (prevents the grabber from ripping itself apart)
      * @param position set position
      */
     public void positionGrabber (double position) {
         transFormedPosition = position + openPosition; //tjis transforms everything based on the calibration. its additaion becasue adding a negative value will correct the position
-        if(!(transFormedPosition < openPosition || transFormedPosition >= (openPosition + range))) { //this checks the position so we dont brak the grabber
+        if(!(transFormedPosition < openPosition || transFormedPosition >= (openPosition + range))) { //this checks the position so we dont break the grabber
             m_pidController.setReference(transFormedPosition, CANSparkMax.ControlType.kPosition);
         }
     }   

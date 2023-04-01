@@ -1,27 +1,23 @@
 package frc.robot.commands.CombinedCommands.TeleopCommands;
 
-import javax.sound.midi.Sequence;
-
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.arm.PositionGrabber;
+import frc.robot.commands.arm.ReleaseConeSlow;
 import frc.robot.commands.arm.Score;
 import frc.robot.commands.intake.OuttakeCone;
 import frc.robot.subsystems.*;
 
-public class ScoreMid extends SequentialCommandGroup{
+public class ScoreMid extends SequentialCommandGroup {
+    /**
+     * Score a cone in the middle position
+     */
     private IntakeSubSystem m_intakeSubsytem;
     private ArmSubsystem m_armSubsystem;
     private GrabberSubsystem m_grabberSubsystem;
-    public ScoreMid(IntakeSubSystem intakeSubSystem, ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem) {
-        m_intakeSubsytem = intakeSubSystem;
-        m_armSubsystem = armSubsystem;
-        m_grabberSubsystem = grabberSubsystem;
-      
+    public ScoreMid(IntakeSubSystem intakeSubsystem, ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem) {      
         addCommands(
-            new CloseGrabber(m_grabberSubsystem),
-            new OuttakeCone(m_intakeSubsytem),
-            new Score(m_armSubsystem, "Mid")
+            // new CloseGrabber(grabberSubsystem),
+            new OuttakeCone(intakeSubsystem),
+            new Score(armSubsystem, "Mid")
         );
-}
+    }
 }

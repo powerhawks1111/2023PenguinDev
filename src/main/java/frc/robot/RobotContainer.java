@@ -38,23 +38,33 @@ import frc.robot.commands.CombinedCommands.CalibrateStuff;
 import frc.robot.commands.CombinedCommands.ConditionalIntake;
 import frc.robot.commands.CombinedCommands.EjectCone;
 import frc.robot.commands.CombinedCommands.HoldTight;
+import frc.robot.commands.CombinedCommands.HumanPlayerReturnHome;
 import frc.robot.commands.CombinedCommands.HumanPlayerStation;
-import frc.robot.commands.CombinedCommands.PickupAndRotate;
+import frc.robot.commands.CombinedCommands.PlaceCommand;
 import frc.robot.commands.CombinedCommands.TeleopCommands.CloseGrabber;
 import frc.robot.commands.CombinedCommands.TeleopCommands.OpenGrabber;
 import frc.robot.commands.CombinedCommands.TeleopCommands.OuttakeBackwards;
+import frc.robot.commands.CombinedCommands.TeleopCommands.ScoreCone;
 import frc.robot.commands.CombinedCommands.TeleopCommands.ScoreHigh;
 import frc.robot.commands.CombinedCommands.TeleopCommands.ScoreLow;
 import frc.robot.commands.CombinedCommands.TeleopCommands.ScoreMid;
 import frc.robot.commands.CombinedCommands.TeleopCommands.TeleopReturnHome;
 import frc.robot.commands.arm.CalibrateArm;
 import frc.robot.commands.arm.ControlArm;
+import frc.robot.commands.arm.MoveArmDown;
+import frc.robot.commands.arm.MoveArmUp;
 import frc.robot.commands.arm.PistonArms;
 import frc.robot.commands.arm.PositionGrabber;
+import frc.robot.commands.arm.ReleaseConeFast;
+import frc.robot.commands.arm.ReleaseConeSlow;
 import frc.robot.commands.arm.ReturnHome;
 import frc.robot.commands.arm.Score;
+import frc.robot.commands.arm.SpinGrabber;
+import frc.robot.commands.arm.SpinGrabberTimed;
 import frc.robot.commands.auto.AutoBuilder;
 import frc.robot.commands.auto.simpleTrajectory;
+import frc.robot.commands.auto.AutoSpecificCommands.AutoScoreHigh;
+import frc.robot.commands.auto.AutoSpecificCommands.ReverseReturnHome;
 import frc.robot.commands.drive.AutoPlace;
 import frc.robot.commands.drive.BalanceCommand;
 import frc.robot.commands.drive.Drive;
@@ -138,12 +148,12 @@ public class RobotContainer {
 
             return m_autoBuilder;
         } else if (autoSelected == "Blue Path") {
-            m_autoBuilder = new AutoBuilder(drivetrain, armSubsystem, intakeSubSystem, grabberSubsystem,autoSelected, 1.65, .85);
+            m_autoBuilder = new AutoBuilder(drivetrain, armSubsystem, intakeSubSystem, grabberSubsystem,autoSelected, 2.5, 1);
             intakeSubSystem.setCone(true);
 
             return m_autoBuilder;
         } else if (autoSelected == "Purple Path") {
-            m_autoBuilder = new AutoBuilder(drivetrain, armSubsystem, intakeSubSystem, grabberSubsystem,autoSelected, 1.5, .9);
+            m_autoBuilder = new AutoBuilder(drivetrain, armSubsystem, intakeSubSystem, grabberSubsystem,autoSelected, 2.5, 1.5);
             intakeSubSystem.setCone(true);
 
             return m_autoBuilder;
@@ -166,23 +176,55 @@ public class RobotContainer {
 
     public void configureButtonBindings () {
         new JoystickButton(driveJoystick, 6).whileTrue(new ConditionalIntake(intakeSubSystem, armSubsystem, grabberSubsystem)); //DONT DO DEGREES
-        new JoystickButton(driveJoystick, 2).whileTrue(new OpenGrabber(grabberSubsystem));
+        new JoystickButton(driveJoystick, 2).onTrue(new MoveArmDown(armSubsystem));
+        new JoystickButton(driveJoystick, 2).onFalse(new MoveArmUp(armSubsystem));
         new JoystickButton(driveJoystick, 1).whileTrue(new BalanceCommand(drivetrain));
         new JoystickButton(driveJoystick, 5).whileTrue(new EjectCone(intakeSubSystem, armSubsystem, grabberSubsystem));
+        
+        
+        
+        // new JoystickButton(driveJoystick, 3).onTrue(new AutoScoreHigh(armSubsystem, intakeSubSystem, grabberSubsystem));
+        // new JoystickButton(driveJoystick, 4).onTrue(new ReverseReturnHome(armSubsystem, intakeSubSystem, grabberSubsystem));
+ 
+
+
+        
+
         //new JoystickButton(driveJoystick, 5).whileTrue(new AutoPlace(drivetrain));
         
         // // .whileTrue(new EjectCone(intakeSubSystem));
         
+
+
+
+
         
         new JoystickButton(operateJoystick, 1).onTrue(new ScoreLow(intakeSubSystem, armSubsystem, grabberSubsystem));
         new JoystickButton(operateJoystick, 3).onTrue(new ScoreMid(intakeSubSystem, armSubsystem, grabberSubsystem));
         new JoystickButton(operateJoystick, 4).onTrue(new ScoreHigh(intakeSubSystem, armSubsystem, grabberSubsystem));
         new JoystickButton(operateJoystick, 2).onTrue(new TeleopReturnHome(armSubsystem, grabberSubsystem));
-        new JoystickButton(operateJoystick, 5).whileTrue(new CloseGrabber(grabberSubsystem));
-        new JoystickButton(operateJoystick, 6).whileTrue(new OpenGrabber(grabberSubsystem));
+        new JoystickButton(operateJoystick, 5).whileTrue(new SpinGrabber(grabberSubsystem, 1));
+        new JoystickButton(operateJoystick, 6).onTrue(new ReleaseConeSlow(grabberSubsystem));
         new JoystickButton(operateJoystick, 10).onTrue(new HoldTight(intakeSubSystem, armSubsystem, grabberSubsystem));
         new JoystickButton(operateJoystick, 9).whileTrue(new HumanPlayerStation(intakeSubSystem, armSubsystem, grabberSubsystem, new HoldTight(intakeSubSystem, armSubsystem, grabberSubsystem)));
+        new JoystickButton(operateJoystick, 9).onFalse(new HumanPlayerReturnHome(armSubsystem, intakeSubSystem));
         left.and(right).toggleOnTrue(new OperatorOverride(armSubsystem, intakeSubSystem, grabberSubsystem, operateJoystick));
+
+
+
+
+
+
+        // new JoystickButton(operateJoystick, 1).onTrue(new SpinGrabber(grabberSubsystem, 1));
+        // new JoystickButton(operateJoystick, 2).onTrue(new ReleaseCone(grabberSubsystem));
+        // new JoystickButton(operateJoystick, 3).whileTrue(new ConditionalIntake(intakeSubSystem, armSubsystem, grabberSubsystem)); //DONT DO DEGREES
+        // new JoystickButton(operateJoystick, 4).onTrue(new HoldTight(intakeSubSystem, armSubsystem, grabberSubsystem));
+        // new JoystickButton(operateJoystick, 5).onTrue(new ScoreLow(intakeSubSystem, armSubsystem, grabberSubsystem));
+        // new JoystickButton(operateJoystick, 6).onTrue(new ScoreMid(intakeSubSystem, armSubsystem, grabberSubsystem));
+        // new JoystickButton(operateJoystick, 7).onTrue(new TeleopReturnHome(armSubsystem, grabberSubsystem));
+
+
+
         //new JoystickButton(operateJoystick, 8).onTrue(new OuttakeBackwards(intakeSubSystem));
         // rightTrigger.whileTrue(m_autoBuilder)
         //new JoystickButton(operateJoystick, 7, 8).onTrue(new HoldTight(intakeSubSystem, armSubsystem, grabberSubsystem));
