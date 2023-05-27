@@ -4,13 +4,13 @@ import java.util.ResourceBundle.Control;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.IntakeSubSystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class PositionIntakeConditionally extends CommandBase {
-    private IntakeSubSystem m_intakeSubsystem;
+    private IntakeSubsystem m_intakeSubsystem;
     private double m_position;
 
-    public PositionIntakeConditionally(IntakeSubSystem subsytem) {
+    public PositionIntakeConditionally(IntakeSubsystem subsytem) {
         m_intakeSubsystem = subsytem;
         // m_position = position;
         addRequirements(m_intakeSubsystem);

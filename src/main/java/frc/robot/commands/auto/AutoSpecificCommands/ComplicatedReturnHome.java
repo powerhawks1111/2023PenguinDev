@@ -14,7 +14,7 @@ public class ComplicatedReturnHome extends SequentialCommandGroup {
      * @param armSubsystem
      * @param grabberSubsystem
      */
-    public ComplicatedReturnHome (IntakeSubSystem intakeSubsystem, ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem) {
+    public ComplicatedReturnHome (IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem) {
         addCommands(
             new OpenGrabber(grabberSubsystem),
             new WaitCommand(.25), 

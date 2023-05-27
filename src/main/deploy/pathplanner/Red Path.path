@@ -2,13 +2,13 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 2.429841431111434,
-        "y": 3.535741500054429
+        "x": 1.9,
+        "y": 4.4
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.1462916591813594,
-        "y": 3.535741500054429
+        "x": 2.6388647514137133,
+        "y": 4.497814258786413
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -16,27 +16,29 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
+        "names": [
+          "ScoreCube"
+        ],
         "executionBehavior": "sequential",
-        "waitBehavior": "after",
+        "waitBehavior": "none",
         "waitTime": 0
       }
     },
     {
       "anchorPoint": {
-        "x": 5.865379730759461,
-        "y": 3.8506658441888315
+        "x": 6.5835594829084405,
+        "y": 4.552223841289789
       },
       "prevControl": {
-        "x": 5.815580645979882,
-        "y": 4.293705977745084
+        "x": 6.420330735398313,
+        "y": 4.806135226305541
       },
       "nextControl": {
-        "x": 6.280507275300264,
-        "y": 0.15746217206720226
+        "x": 6.420330735398313,
+        "y": 4.806135226305541
       },
-      "holonomicAngle": 0,
-      "isReversal": false,
+      "holonomicAngle": 3.433630362450491,
+      "isReversal": true,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
@@ -49,12 +51,12 @@
     },
     {
       "anchorPoint": {
-        "x": 1.814307485757829,
-        "y": 1.073605718640009
+        "x": 1.9,
+        "y": 5.005637028817917
       },
       "prevControl": {
-        "x": 2.6980210316822193,
-        "y": 1.073605718640009
+        "x": 1.6092493459020925,
+        "y": 5.005637028817917
       },
       "nextControl": null,
       "holonomicAngle": 0,
@@ -63,15 +65,37 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
+        "names": [
+          "ScoreHigh",
+          "ReturnHome"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "after",
         "waitTime": 0
       }
     }
   ],
-  "maxVelocity": 2.0,
-  "maxAcceleration": 1.75,
-  "isReversed": null,
-  "markers": []
+  "markers": [
+    {
+      "position": 0.25,
+      "names": [
+        "event",
+        "ReturnHome"
+      ]
+    },
+    {
+      "position": 0.7,
+      "names": [
+        "event",
+        "DeployIntake"
+      ]
+    },
+    {
+      "position": 1.7999999999999967,
+      "names": [
+        "event",
+        "OuttakeCone"
+      ]
+    }
+  ]
 }

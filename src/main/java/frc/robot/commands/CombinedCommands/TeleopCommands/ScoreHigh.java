@@ -13,7 +13,7 @@ public class ScoreHigh extends SequentialCommandGroup {
      * @param armSubsystem
      * @param grabberSubsystem
      */
-    public ScoreHigh(IntakeSubSystem intakeSubsytem, ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem) {      
+    public ScoreHigh(IntakeSubsystem intakeSubsytem, ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem) {      
         addCommands(
             // new CloseGrabber(grabberSubsystem),
             new OuttakeCone(intakeSubsytem),

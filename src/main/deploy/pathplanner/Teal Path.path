@@ -1,0 +1,61 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 1.91,
+        "y": 3.328008234963839
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.7945908530170256,
+        "y": 3.328008234963839
+      },
+      "holonomicAngle": 0.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "ScoreHigh"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "after",
+        "waitTime": 0.0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 5.2233199203284055,
+        "y": 2.693229772423193
+      },
+      "prevControl": {
+        "x": 3.5456911264743267,
+        "y": 2.4665231786591284
+      },
+      "nextControl": null,
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "BalanceCommand"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "before",
+        "waitTime": 0.3
+      }
+    }
+  ],
+  "markers": [
+    {
+      "position": 0.19090909090909094,
+      "names": [
+        "event",
+        "ReturnHome"
+      ]
+    }
+  ]
+}

@@ -5,14 +5,16 @@ import frc.robot.subsystems.ArmSubsystem;
 
 public class MoveArmUp extends CommandBase {
     private ArmSubsystem m_armSubsystem;
-    public MoveArmUp(ArmSubsystem armSubsystem) {
+    private double m_change;
+    public MoveArmUp(ArmSubsystem armSubsystem, double change) {
         m_armSubsystem = armSubsystem;
+        m_change = change;
         addRequirements(m_armSubsystem);
     }
 
     @Override
     public void initialize() {
-        m_armSubsystem.moveUp();
+        m_armSubsystem.moveUp(m_change);
     }
 
     @Override

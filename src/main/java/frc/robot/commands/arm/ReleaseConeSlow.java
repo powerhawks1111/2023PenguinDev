@@ -25,7 +25,7 @@ public class ReleaseConeSlow extends CommandBase {
 
     @Override 
     public void execute() {
-        m_grabberSubsystem.runGrabber(-.4);
+        m_grabberSubsystem.runGrabber(-.45); // -.35
     }
 
     @Override

@@ -7,20 +7,20 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.commands.CombinedCommands.HoldTight;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
-import frc.robot.subsystems.IntakeSubSystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class IntakeCone extends CommandBase{
-    private IntakeSubSystem m_intakeSubsystem;
+    private IntakeSubsystem m_intakeSubsystem;
     
     private Timer m_timer = new Timer();
     private HoldTight m_holdTight;
     private boolean m_conditional = false;
     boolean state = false; //this is used to see if we've picked up a cone and stuff
 
-    public IntakeCone(IntakeSubSystem intakeSubSystem, ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem, HoldTight holdTight, boolean conditional) {
+    public IntakeCone(IntakeSubsystem intakeSubSystem, ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem, HoldTight holdTight, boolean conditional) {
         m_intakeSubsystem = intakeSubSystem;
         m_holdTight = holdTight; 
         m_conditional = conditional;

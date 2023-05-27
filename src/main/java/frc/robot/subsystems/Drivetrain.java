@@ -37,8 +37,10 @@ public class Drivetrain extends SubsystemBase {
     
     private VisionSubsystem m_visionSubsystem;// = new VisionSubsystem();
     
-    public static final double kMaxSpeed = 2; // 3.68 meters per second or 12.1 ft/s (max speed of SDS Mk3 with Neo motor)
-    public static final double kMaxAngularSpeed = Math.PI/3; // 1/2 rotation per second
+    // kMaxSpeed was 2 AND kmaxangularspeed was pi/3 (before testing [district champs])
+    // SOLID SPEEDS 3.25 M/S /AND PI/2.25 ROT/S
+    public static final double kMaxSpeed = 3.25; // 3.68 meters per second or 12.1 ft/s (max speed of SDS Mk3 with Neo motor)
+    public static final double kMaxAngularSpeed = Math.PI/2.15; // 1/2 rotation per second
 
     private final AHRS navx = new AHRS();
     public boolean donePlace = false;
@@ -71,10 +73,10 @@ public class Drivetrain extends SubsystemBase {
     private final Translation2d m_backRightLocation = new Translation2d( -0.538, -0.538);
 
     // Constructor for each swerve module
-    private final SwerveModule m_frontRight  = new SwerveModule(21, 2, 10, 0.8182);
-    private final SwerveModule m_frontLeft = new SwerveModule(3, 4, 11, 0.812);
-    private final SwerveModule m_backLeft  = new SwerveModule(5, 6, 12, 0.124);
-    private final SwerveModule m_backRight   = new SwerveModule(7, 8, 13, 0.170); //0.05178
+    private final SwerveModule m_frontRight  = new SwerveModule(21, 2, 10, 0.8190); //.8208
+    private final SwerveModule m_frontLeft = new SwerveModule(3, 4, 11, 0.8082); //.8100
+    private final SwerveModule m_backLeft  = new SwerveModule(5, 6, 12, 0.1244); //.1217
+    private final SwerveModule m_backRight   = new SwerveModule(7, 8, 13, 0.1649); //.1666
 
     // private final SwerveModulePosition[] initialModule = new SwerveModulePosition(0, 0)
     // Swerve Drive Kinematics (note the ordering [frontRight, frontLeft, backLeft, backRight] [counterclockwise from the frontRight])

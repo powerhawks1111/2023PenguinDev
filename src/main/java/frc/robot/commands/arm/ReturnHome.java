@@ -26,7 +26,7 @@ public class ReturnHome extends CommandBase{
     @Override 
     public void execute() {
         m_armSubsystem.deployPistons(false);
-        if (m_conditional && m_timer.get() > .5) {
+        if (m_conditional && m_timer.get() > .5) { // m_timer.get() > .5
             m_armSubsystem.positionArm(0); 
         } else if (!m_conditional) {
             m_armSubsystem.positionArm(0);
@@ -34,7 +34,7 @@ public class ReturnHome extends CommandBase{
     }
 
     @Override 
-    public boolean isFinished () {
+    public boolean isFinished () {  
         if (!m_conditional){
             return m_armSubsystem.closeToPosition();
         } else {
@@ -48,6 +48,7 @@ public class ReturnHome extends CommandBase{
 
     @Override
     public void end(boolean interrupted) {
+        m_armSubsystem.setStatus(false);
         m_timer.stop();
         m_timer.reset();
     }

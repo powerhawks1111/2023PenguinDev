@@ -11,7 +11,7 @@ import frc.robot.subsystems.GrabberSubsystem;
 public class AutoPlaceCone extends SequentialCommandGroup {
     public AutoPlaceCone(ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem) {
         addCommands(
-            new MoveArmDown(armSubsystem),
+            new MoveArmDown(armSubsystem, 5),
             new ReleaseConeSlow(grabberSubsystem)
         );
     }

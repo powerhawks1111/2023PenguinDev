@@ -10,9 +10,9 @@ public class SpinGrabber extends CommandBase {
     private GrabberSubsystem m_grabberSubsystem; 
     private double m_speed;
     /**
-     * Score the cone at the specified position
-     * @param armSubsystem
-     * @param height low, mid, or high
+     * Spin the grabber at a specified speed
+     * @param grabberSubsystem
+     * @param speed -1 to +1 (positive intakes, negative outtakes)
      */
     public SpinGrabber(GrabberSubsystem grabberSubsystem, double speed) {
         m_grabberSubsystem = grabberSubsystem;
@@ -33,7 +33,7 @@ public class SpinGrabber extends CommandBase {
     }
 
     @Override
-    public void end(boolean interrupt){
+    public void end(boolean interrupt) {
         m_grabberSubsystem.runGrabber(0);
         // m_grabberSubsystem.positionGrabber(0);
         // m_armSubsystem.deployPistons(true);

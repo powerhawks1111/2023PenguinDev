@@ -14,6 +14,7 @@ public class SmartDashboardUpdater {
     public static final String kAuto4       = "Green Path";
     public static final String kAuto5       = "Blue Path";
     public static final String kAuto6       = "Purple Path";
+    public static final String kAuto7       = "Teal Path";
 
     private final SendableChooser<String> testChooser = new SendableChooser<>();
     
@@ -50,6 +51,7 @@ public class SmartDashboardUpdater {
         autoChooser.addOption       ("Green Path", kAuto4);
         autoChooser.addOption       ("Blue Path", kAuto5);
         autoChooser.addOption       ("Purple Path", kAuto6);
+        autoChooser.addOption       ("Teal Path", kAuto7);
 
         SmartDashboard.putData("Autonomuos Choices", autoChooser);
     }

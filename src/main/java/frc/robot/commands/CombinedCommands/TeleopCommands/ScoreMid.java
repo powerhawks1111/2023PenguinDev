@@ -10,10 +10,10 @@ public class ScoreMid extends SequentialCommandGroup {
     /**
      * Score a cone in the middle position
      */
-    private IntakeSubSystem m_intakeSubsytem;
+    private IntakeSubsystem m_intakeSubsytem;
     private ArmSubsystem m_armSubsystem;
     private GrabberSubsystem m_grabberSubsystem;
-    public ScoreMid(IntakeSubSystem intakeSubsystem, ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem) {      
+    public ScoreMid(IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem) {      
         addCommands(
             // new CloseGrabber(grabberSubsystem),
             new OuttakeCone(intakeSubsystem),

@@ -26,18 +26,18 @@
     },
     {
       "anchorPoint": {
-        "x": 6.565422955407315,
-        "y": 4.588496896292039
+        "x": 6.56,
+        "y": 4.49
       },
       "prevControl": {
-        "x": 5.114500755317301,
-        "y": 4.742657380051602
+        "x": 5.1090777999099855,
+        "y": 4.644160483759563
       },
       "nextControl": {
-        "x": 5.114500755317301,
-        "y": 4.742657380051602
+        "x": 5.1090777999099855,
+        "y": 4.644160483759563
       },
-      "holonomicAngle": 0,
+      "holonomicAngle": -1.94,
       "isReversal": true,
       "velOverride": null,
       "isLocked": false,
@@ -51,23 +51,46 @@
     },
     {
       "anchorPoint": {
-        "x": 2.829298290175528,
-        "y": 4.9784322375662295
+        "x": 2.73,
+        "y": 4.8
       },
       "prevControl": {
-        "x": 4.035377369000349,
-        "y": 4.969363973815667
+        "x": 3.9360790788248208,
+        "y": 4.790931736249437
       },
-      "nextControl": null,
-      "holonomicAngle": 0,
+      "nextControl": {
+        "x": 1.5239209211751792,
+        "y": 4.809068263750563
+      },
+      "holonomicAngle": -4.166400455700195,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [
-          "ScoreLow"
-        ],
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.701446911665754,
+        "y": 3.6
+      },
+      "prevControl": {
+        "x": 6.131331069131281,
+        "y": 4.822617369807317
+      },
+      "nextControl": null,
+      "holonomicAngle": -51.546290783294204,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
@@ -76,17 +99,38 @@
   ],
   "markers": [
     {
-      "position": 0.8545454545454546,
-      "names": [
-        "DeployIntake",
-        "DeployIntake"
-      ]
-    },
-    {
       "position": 0.16363636363636358,
       "names": [
         "event",
         "ReturnHome"
+      ]
+    },
+    {
+      "position": 0.77,
+      "names": [
+        "event",
+        "DeployIntake"
+      ]
+    },
+    {
+      "position": 1.55,
+      "names": [
+        "event",
+        "ScoreLow"
+      ]
+    },
+    {
+      "position": 2.3727272727272695,
+      "names": [
+        "event",
+        "ReturnHome"
+      ]
+    },
+    {
+      "position": 2.7818181818181755,
+      "names": [
+        "event",
+        "DeployIntake"
       ]
     }
   ]

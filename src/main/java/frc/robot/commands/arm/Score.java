@@ -28,18 +28,29 @@ public class Score extends CommandBase{
     @Override 
     public void execute() {
         if (m_height == "Low") {
-            m_armSubsystem.positionArm(Math.PI/8);
+            m_armSubsystem.positionArm(.589); //pi/8
             m_armSubsystem.deployPistons(false);
         }
         if (m_height == "Mid") {
-            m_armSubsystem.positionArm(Math.PI/2);
+            m_armSubsystem.positionArm(1.524); // 1.409
             m_armSubsystem.deployPistons(false);
         }
         if (m_height == "High") {
             m_armSubsystem.positionArm(3.14);
+            // m_armSubsystem.deployPistons(true);
+            if (m_armSubsystem.getArmPosition() > Math.PI / 4.5) {
+                m_armSubsystem.deployPistons(true);
+            }
+            // if (m_armSubsystem.getArmPosition() > Math.PI / 2) {
+            //     m_armSubsystem.deployPistons(true);
+            // }
+        }
+        if (m_height == "AutoCube") {
+            m_armSubsystem.positionArm(3.02); //3.28 (was too high)
             if (m_armSubsystem.getArmPosition() > Math.PI / 2) {
                 m_armSubsystem.deployPistons(true);
             }
+            // m_armSubsystem.deployPistons(false);
         }
     }
 

@@ -2,13 +2,13 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 2.458470916941834,
-        "y": 4.995845277404841
+        "x": 1.9,
+        "y": 0.501016002032004
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.199219896440712,
-        "y": 4.995845277404841
+        "x": 1.7845908530170256,
+        "y": 0.501016002032004
       },
       "holonomicAngle": 0.0,
       "isReversal": false,
@@ -26,65 +26,42 @@
     },
     {
       "anchorPoint": {
-        "x": 1.7999927428426288,
-        "y": 4.995845277404841
+        "x": 6.665173856663504,
+        "y": 0.797962648556876
       },
       "prevControl": {
-        "x": 2.0592437633437513,
-        "y": 4.995845277404841
-      },
-      "nextControl": {
-        "x": 2.0592437633437513,
-        "y": 4.995845277404841
-      },
-      "holonomicAngle": 0.0,
-      "isReversal": true,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0.25
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 6.495228419028266,
-        "y": 4.6
-      },
-      "prevControl": {
-        "x": 5.178272070829856,
-        "y": 4.509144018288037
+        "x": 5.8490301191128715,
+        "y": 0.7526213298040634
       },
       "nextControl": null,
-      "holonomicAngle": 1.246900099596863,
+      "holonomicAngle": 0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "before",
-        "waitTime": 0.0
+        "names": [
+          "PickUp"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
       }
     }
   ],
   "markers": [
     {
-      "position": 1.0,
-      "names": [
-        "event",
-        "ReturnHome"
-      ]
-    },
-    {
-      "position": 1.7,
+      "position": 0.72,
       "names": [
         "event",
         "DeployIntake"
+      ]
+    },
+    {
+      "position": 0.2545454545454546,
+      "names": [
+        "event",
+        "ReturnHome"
       ]
     }
   ]

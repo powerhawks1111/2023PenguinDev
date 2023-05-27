@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class IntakeSubSystem extends SubsystemBase {
+public class IntakeSubsystem extends SubsystemBase {
     // Declaration of variables
     private int pickupPort = 12; //should be 12
     private int rotatePort = 13;
@@ -31,7 +31,7 @@ public class IntakeSubSystem extends SubsystemBase {
     private int rotatePWMPort = 18;
     private DutyCycle m_TurnPWMEncoder = new DutyCycle( new DigitalInput(rotatePWMPort));
     private AHRS navx = new AHRS();
-    private double home = 0.188;
+    private double home = 0.188; // .188 (changed during champs) [trying .194]
     private double kP = .00023;
     private double kI = 0;
     private double kD = 0;
@@ -50,7 +50,7 @@ public class IntakeSubSystem extends SubsystemBase {
     //private ProfiledPIDController rotatePIDController = new ProfiledPIDController(1.25, 0, 0, new Constraints(3, 1.5));
 
     // gear ratio is 25:1
-    public IntakeSubSystem(DigitalInput input) {
+    public IntakeSubsystem(DigitalInput input) {
         coneDetector = input;
         m_pidController.setP(kP);
         m_pidController.setI(kI);

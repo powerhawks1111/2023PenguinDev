@@ -41,6 +41,7 @@ public class ArmSubsystem extends SubsystemBase {
     private boolean isScoringButDangerous = false;
     private double usualHome = 0;
     private DigitalInput coneDetector; //= new DigitalInput(9);
+    private boolean m_status;
 
 
     private static DoubleSolenoid armPistons = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 0);
@@ -200,18 +201,25 @@ public class ArmSubsystem extends SubsystemBase {
         return (Math.abs(m_rightMotor.getEncoder().getPosition() - transformedPosition) <= 2.5);
     }
 
-    public void moveUp() {
+    public void moveUp(double change) {
         // positionArm(getArmPosition() + .1);
-        transformedPosition += 5;
+        transformedPosition += change;
         m_pidController.setReference(transformedPosition , CANSparkMax.ControlType.kSmartMotion, smartMotionSlot);
     }
 
-    public void moveDown() {
+    public void moveDown(double change) {
         // positionArm(getArmPosition() - .1);
-        transformedPosition -= 5;
+        transformedPosition -= change;
         m_pidController.setReference(transformedPosition , CANSparkMax.ControlType.kSmartMotion, smartMotionSlot);
     }
 
+    public void setStatus(boolean status) {
+        m_status = status;
+    }
+
+    public boolean getStatus() {
+        return m_status;
+    }
     
 
     /* Deprecated (not using the beam breaker anymore)

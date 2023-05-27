@@ -11,10 +11,9 @@ import frc.robot.commands.intake.OuttakeCone;
 import frc.robot.commands.intake.PositionIntake;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
-import frc.robot.subsystems.IntakeSubSystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class EjectCone extends SequentialCommandGroup {
-    // private IntakeSubSystem m_intakeSubsytem;
     /**
      * Outtake a cone
      * Alternative method to scoring a cone on the lower level
@@ -22,11 +21,11 @@ public class EjectCone extends SequentialCommandGroup {
      * @param armSubsystem
      * @param grabberSubsystem
      */
-    public EjectCone(IntakeSubSystem intakeSubSystem, ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem) {
+    public EjectCone(IntakeSubsystem intakeSubSystem, ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem) {
         // m_holdTight = new HoldTight(m_intakeSubsytem, m_armSubsystem, m_grabberSubsystem);
         addCommands(
         
-            new ControlArm(armSubsystem, Math.PI/8),
+            // new ControlArm(armSubsystem, Math.PI/8),
             new ParallelCommandGroup(
                 new PositionIntake(intakeSubSystem, Math.PI/3),
                 new SequentialCommandGroup(

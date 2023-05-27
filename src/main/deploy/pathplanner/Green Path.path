@@ -2,12 +2,12 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 2.4727856598570344,
+        "x": 1.9,
         "y": 0.501016002032004
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.35737651287406,
+        "x": 1.7845908530170256,
         "y": 0.501016002032004
       },
       "holonomicAngle": 0.0,
@@ -17,36 +17,11 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "ScoreMid"
+          "ScoreHigh"
         ],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 1.8,
-        "y": 0.5
-      },
-      "prevControl": {
-        "x": 1.9438613858460827,
-        "y": 0.5
-      },
-      "nextControl": {
-        "x": 1.9438613858460827,
-        "y": 0.5
-      },
-      "holonomicAngle": 0,
-      "isReversal": true,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
+        "executionBehavior": "sequential",
+        "waitBehavior": "after",
+        "waitTime": 0.0
       }
     },
     {
@@ -55,15 +30,15 @@
         "y": 0.9447730324032081
       },
       "prevControl": {
-        "x": 3.401664561632543,
-        "y": 0.9447730324032081
+        "x": 4.778974996546484,
+        "y": 0.8433039673096898
       },
       "nextControl": {
-        "x": 7.082132878551473,
-        "y": 0.9447730324032081
+        "x": 4.778974996546484,
+        "y": 0.8433039673096898
       },
       "holonomicAngle": 0,
-      "isReversal": false,
+      "isReversal": true,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
@@ -80,8 +55,8 @@
         "y": 2.662542182227222
       },
       "prevControl": {
-        "x": 5.707917558692261,
-        "y": 2.5623389818208215
+        "x": 6.13014629538031,
+        "y": 3.636329202482967
       },
       "nextControl": null,
       "holonomicAngle": 4.39870535499548,
@@ -104,14 +79,14 @@
   "isReversed": null,
   "markers": [
     {
-      "position": 1.0,
+      "position": 0.3272727272727273,
       "names": [
         "event",
         "ReturnHome"
       ]
     },
     {
-      "position": 1.7181818181818174,
+      "position": 0.88,
       "names": [
         "event",
         "DeployIntake"

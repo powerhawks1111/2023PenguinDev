@@ -9,11 +9,16 @@ import frc.robot.commands.CombinedCommands.ConditionalIntake;
 import frc.robot.commands.CombinedCommands.HoldTight;
 import frc.robot.commands.CombinedCommands.TeleopCommands.CloseGrabber;
 import frc.robot.commands.CombinedCommands.TeleopCommands.OpenGrabber;
+import frc.robot.commands.CombinedCommands.TeleopCommands.ScoreCube;
 import frc.robot.commands.CombinedCommands.TeleopCommands.ScoreHigh;
 import frc.robot.commands.CombinedCommands.TeleopCommands.ScoreLow;
 import frc.robot.commands.CombinedCommands.TeleopCommands.ScoreMid;
 import frc.robot.commands.arm.ReturnHome;
+import frc.robot.commands.arm.SpinGrabber;
+import frc.robot.commands.arm.SpinGrabberTimed;
 import frc.robot.commands.auto.AutoSpecificCommands.AutoConditional;
+import frc.robot.commands.auto.AutoSpecificCommands.AutoCubeHigh;
+import frc.robot.commands.auto.AutoSpecificCommands.AutoPickUpAndIntake;
 import frc.robot.commands.auto.AutoSpecificCommands.AutoScoreHigh;
 import frc.robot.commands.auto.AutoSpecificCommands.AutoScoreLow;
 import frc.robot.commands.auto.AutoSpecificCommands.ComplicatedReturnHome;
@@ -23,6 +28,7 @@ import frc.robot.commands.drive.BalanceCommand;
 import frc.robot.commands.drive.StayStill;
 import frc.robot.commands.intake.DefaultPositionIntake;
 import frc.robot.commands.intake.IntakeCone;
+import frc.robot.commands.intake.OuttakeCone;
 import frc.robot.commands.intake.PositionIntake;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -36,7 +42,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.GrabberSubsystem;
-import frc.robot.subsystems.IntakeSubSystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
@@ -69,7 +75,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 public class AutoBuilder extends CommandBase {
     List<PathPlannerTrajectory> pathGroup;
     private Drivetrain m_drivetrain;
-    public IntakeSubSystem m_intakeSubSystem;
+    public IntakeSubsystem m_intakeSubSystem;
     public ArmSubsystem m_armSubsystem;
     public GrabberSubsystem m_grabberSubsystem;
     private SwerveAutoBuilder autoBuilder;
@@ -87,7 +93,7 @@ public class AutoBuilder extends CommandBase {
      * @param maxVelocity max velocity for the specified auto path
      * @param maxAcceleration max acceleration for the specified auto
      */
-    public AutoBuilder (Drivetrain drivetrain, ArmSubsystem armSubsystem, IntakeSubSystem intakeSubsystem, GrabberSubsystem grabberSubsystem, String autoPath, double maxVelocity, double maxAcceleration) { //TODO GET CONSTANTS RIGHT
+    public AutoBuilder (Drivetrain drivetrain, ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem, GrabberSubsystem grabberSubsystem, String autoPath, double maxVelocity, double maxAcceleration) { //TODO GET CONSTANTS RIGHT
         pathGroup = PathPlanner.loadPathGroup(autoPath, new PathConstraints(maxVelocity, maxAcceleration));
         System.out.println(autoPath);
         m_drivetrain = drivetrain;
@@ -107,6 +113,11 @@ public class AutoBuilder extends CommandBase {
         //eventMap.put("CalibrateStuff", new CalibrateStuff(m_intakeSubSystem, m_armSubsystem));
         // eventMap.put("RunIntake", new IntakeCone(m_intakeSubSystem, m_armSubsystem, m_grabberSubsystem, new HoldTight(m_intakeSubSystem, m_armSubsystem, m_grabberSubsystem))); 
         eventMap.put("PositionIntake", new PositionIntake(m_intakeSubSystem, (Math.PI * .6666)));
+        eventMap.put("SpinGrabberTimed", new SpinGrabberTimed(grabberSubsystem, .2));
+        eventMap.put("SpinGrabber", new SpinGrabberTimed(grabberSubsystem, .6));
+        eventMap.put("ScoreCube", new AutoCubeHigh(grabberSubsystem, intakeSubsystem, armSubsystem));
+        eventMap.put("OuttakeCone", new OuttakeCone(intakeSubsystem));
+        eventMap.put("PickUp", new AutoPickUpAndIntake(intakeSubsystem, armSubsystem, grabberSubsystem));
         // THESE PID TERMS WORK: Translate: P:2.75, D:.65, TURN P:1.1, D:.1
         m_drivetrain.resetNavxMark(pathGroup.get(0).getInitialHolonomicPose().getRotation().getDegrees()); //this resets our degrees to feild
         System.out.println(pathGroup.get(0).getInitialHolonomicPose().getRotation().getDegrees()); //3.25, 0, .15            was 8

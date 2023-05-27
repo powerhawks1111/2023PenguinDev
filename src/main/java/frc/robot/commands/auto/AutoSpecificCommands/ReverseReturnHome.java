@@ -8,10 +8,10 @@ import frc.robot.commands.arm.ReturnHome;
 import frc.robot.commands.intake.PositionIntake;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
-import frc.robot.subsystems.IntakeSubSystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class ReverseReturnHome extends SequentialCommandGroup {
-    public ReverseReturnHome(ArmSubsystem armSubsystem, IntakeSubSystem intakeSubsystem, GrabberSubsystem grabberSubsystem) {
+    public ReverseReturnHome(ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem, GrabberSubsystem grabberSubsystem) {
         addCommands(
             new ParallelCommandGroup(
                 new PositionIntake(intakeSubsystem, .3),

@@ -9,10 +9,10 @@ import frc.robot.commands.intake.PositionIntake;
 import frc.robot.commands.intake.SetCone;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
-import frc.robot.subsystems.IntakeSubSystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class AutoScoreHigh extends SequentialCommandGroup {
-    public AutoScoreHigh(ArmSubsystem armSubsystem, IntakeSubSystem intakeSubsystem, GrabberSubsystem grabberSubsystem) {
+    public AutoScoreHigh(ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem, GrabberSubsystem grabberSubsystem) {
         addCommands(
             new SetCone(intakeSubsystem, false),
             new PositionIntake(intakeSubsystem, 3.3),

@@ -16,16 +16,17 @@ import frc.robot.commands.intake.PositionIntakeConditionally;
 import frc.robot.commands.intake.SetCone;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
-import frc.robot.subsystems.IntakeSubSystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class HoldTight extends SequentialCommandGroup {
     /**
-     * H
+     * After the cone is spin out from the intake, the arm can
+     * take control of the cone to be placed at a later time
      * @param intakeSubsystem
      * @param armSubsystem
      * @param grabberSubsystem
      */
-    public HoldTight(IntakeSubSystem intakeSubsystem, ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem) {       
+    public HoldTight(IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem) {       
         addCommands(
             new SetCone(intakeSubsystem, true),
             new ParallelCommandGroup(

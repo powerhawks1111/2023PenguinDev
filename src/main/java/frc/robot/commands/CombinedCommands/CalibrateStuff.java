@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.arm.CalibrateArm;
 import frc.robot.commands.intake.CalibrateIntake;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.IntakeSubSystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class CalibrateStuff extends SequentialCommandGroup {
     /**
@@ -14,7 +14,7 @@ public class CalibrateStuff extends SequentialCommandGroup {
      * @param intakeSubSystem
      * @param armSubsystem
      */
-    public CalibrateStuff(IntakeSubSystem intakeSubSystem, ArmSubsystem armSubsystem) {       
+    public CalibrateStuff(IntakeSubsystem intakeSubSystem, ArmSubsystem armSubsystem) {       
         addCommands(
             new WaitCommand(.1),
             new CalibrateArm(armSubsystem),

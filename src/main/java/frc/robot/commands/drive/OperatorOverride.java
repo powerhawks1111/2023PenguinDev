@@ -7,17 +7,16 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
-import frc.robot.subsystems.IntakeSubSystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class OperatorOverride extends CommandBase {
     private Joystick operateJoystick;
     private ArmSubsystem m_armSubsystem;
-    private IntakeSubSystem m_intakeSubSystem;
+    private IntakeSubsystem m_intakeSubSystem;
     private GrabberSubsystem m_grabberSubsystem;
     private Timer m_Timer = new Timer();
-
     
-    public OperatorOverride(ArmSubsystem armSubsystem, IntakeSubSystem intakeSubSystem, GrabberSubsystem grabberSubsystem, Joystick operatorJoystick) {
+    public OperatorOverride(ArmSubsystem armSubsystem, IntakeSubsystem intakeSubSystem, GrabberSubsystem grabberSubsystem, Joystick operatorJoystick) {
         m_armSubsystem = armSubsystem;
         m_intakeSubSystem = intakeSubSystem;
         m_grabberSubsystem = grabberSubsystem;
@@ -25,7 +24,6 @@ public class OperatorOverride extends CommandBase {
         addRequirements(m_armSubsystem);
         addRequirements(m_intakeSubSystem);
         addRequirements(m_grabberSubsystem); //TODO ADD BRAKE MODE COMMANDS
-
     }   
 
     @Override
@@ -50,6 +48,7 @@ public class OperatorOverride extends CommandBase {
         } else if (operatePOV == 180) {
             m_intakeSubSystem.moveDown();
         }
+        
         // } else if (operatePOV == 90) {
         //     armIteration = 1;
         // } else if (operatePOV == 270) {

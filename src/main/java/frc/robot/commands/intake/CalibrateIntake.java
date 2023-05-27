@@ -4,12 +4,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
-import frc.robot.subsystems.IntakeSubSystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class CalibrateIntake extends CommandBase{
-    private IntakeSubSystem m_intakeSubsystem;
+    private IntakeSubsystem m_intakeSubsystem;
     private Timer m_timer = new Timer();
-    public CalibrateIntake (IntakeSubSystem intakeSubsystem) {
+    public CalibrateIntake (IntakeSubsystem intakeSubsystem) {
         m_intakeSubsystem = intakeSubsystem;
         addRequirements(m_intakeSubsystem);
     }
